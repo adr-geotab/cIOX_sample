@@ -24,9 +24,9 @@ print('Bring up CAN0....')
 time.sleep(0.1)
 
 try:
-    # bus = can.interface.Bus(channel='can0', bustype='socketcan')
-    bus = can.Bus(channel=None, interface=None,
-                  config_context=None, ignore_config=False)
+    bus = can.interface.Bus(channel='can0', bustype='socketcan')
+    # bus = can.Bus(channel=None, interface=None,
+    #               config_context=None, ignore_config=False)
     # bus = can.interface.Bus(channel="can0")
 except OSError:
     print('Cannot find PiCAN board.')
