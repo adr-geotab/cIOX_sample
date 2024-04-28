@@ -25,7 +25,7 @@ time.sleep(0.1)
 
 try:
     # bus = can.interface.Bus(channel='can0', bustype='socketcan_native')
-    bus = can.interface.Bus(channel="can0", bustype='slcan', bitrate=500000)
+    bus = can.interface.Bus(channel="can0")
 except OSError:
     print('Cannot find PiCAN board.')
     exit()
