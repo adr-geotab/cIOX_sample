@@ -36,11 +36,11 @@ try:
     while True:
         message = bus.recv()  # Wait until a message is received.
         s = ''
-        for i in range(message.dlc):
-            s += '{0:x} '.format(message.data[i])
 
         print(datetime.datetime.fromtimestamp(message.timestamp),
-              message.arbitration_id, message.dlc, s, '\n')
+              message.arbitration_id, message.dlc)
+        for msg in bus:
+            print(msg.data)
 
         # c = '{0:f} {1:x} {2:x} '.format(
         #     message.timestamp, message.arbitration_id, message.dlc)
