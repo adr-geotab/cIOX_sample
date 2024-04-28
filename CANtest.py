@@ -15,6 +15,7 @@
 
 import can
 import time
+import datetime
 import os
 
 
@@ -34,7 +35,8 @@ print('Ready')
 try:
     while True:
         message = bus.recv()  # Wait until a message is received.
-        print(message.timestamp, message.arbitration_id, message.dlc, '\n')
+        print(datetime.datetime.fromtimestamp(message.timestamp),
+              message.arbitration_id, message.dlc, message.data, '\n')
 
         # c = '{0:f} {1:x} {2:x} '.format(
         #     message.timestamp, message.arbitration_id, message.dlc)
