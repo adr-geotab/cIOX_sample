@@ -35,17 +35,18 @@ print('Ready')
 try:
     while True:
         message = bus.recv()  # Wait until a message is received.
+
+        c = '{0:f} {1:x} {2:x} '.format(
+            message.timestamp, message.arbitration_id, message.dlc)
+
         s = ''
         for i in range(message.dlc):
             s += '{0:x} '.format(message.data[i])
 
-        print(datetime.datetime.fromtimestamp(message.timestamp),
-              message.arbitration_id, message.dlc, message.data, s)
+        print(' {}'.format(c+s))
 
-        # c = '{0:f} {1:x} {2:x} '.format(
-        #     message.timestamp, message.arbitration_id, message.dlc)
-
-        # print(' {}'.format(c+s))
+        # print(datetime.datetime.fromtimestamp(message.timestamp),
+        #       message.arbitration_id, message.dlc, message.data, s)
 
 
 except KeyboardInterrupt:
