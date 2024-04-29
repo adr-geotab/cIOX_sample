@@ -4,7 +4,7 @@ import can
 import IOXcan_HardwareLib
 
 # Initializing canbus
-canbus = can.interface.Bus(channel="COM6", bustype='slcan', bitrate=500000)
+canbus = can.interface.Bus(channel='can0', bustype='socketcan')
 
 # Defining device ID (may be editted)
 DeviceId = 4108
