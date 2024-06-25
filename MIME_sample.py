@@ -26,7 +26,7 @@ try:
         if (inbound_msg.arbitration_id == 0x00010000 and poll_count == 0): 
             poll_count += 1
             print("|| Poll Request")
-            outbound_msg = can.Message(arbitration_id=0x0002ABCD, data=[0x01, 0x01, 0x00, 0x07, 0x01, 0x00, 0x00, 0x9A], timestamp=time.time())
+            outbound_msg = can.Message(arbitration_id=0x0002ABCD, data=[0x01, 0x01, 0x00, 0x47, 0x39, 0x00, 0x00, 0x9A], timestamp=time.time())
             print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| Poll Response (Handshake)')
             bus.send(outbound_msg)
 
@@ -36,32 +36,32 @@ try:
             if poll_count == 2:
                 poll_count += 1
                 outbound_msg = can.Message(arbitration_id=0x0025ABCD, data=[0x01, 0x00, 0x00], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-1')
+                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-1 (Beginning Packet Wrapper)')
                 bus.send(outbound_msg)
 
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x0025ABCD' and prev_outbound_msg.data[2] == 0x00:
                 outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x00, 0x0A, 0x69, 0x6D, 0x61, 0x67, 0x65, 0x2F], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-2')
+                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-2 (MIME Type)')
                 bus.send(outbound_msg)
 
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and prev_outbound_msg.data[0] == 0x00:
                 outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x6A, 0x70, 0x65, 0x67, 0x0C, 0x00, 0x00, 0x00], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-3')
+                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-3 (MIME Type)')
                 bus.send(outbound_msg)
 
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and prev_outbound_msg.data[0] == 0x6A:
                 outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x46, 0x69, 0x72, 0x6D, 0x77, 0x61, 0x72, 0x65], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-4')
+                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-4 (MIME Payload)')
                 bus.send(outbound_msg)
             
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and prev_outbound_msg.data[0] == 0x46:
                 outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x49, 0x6E, 0x69, 0x74], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-5')
+                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-5 (MIME Payload)')
                 bus.send(outbound_msg)
 
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and prev_outbound_msg.data[0] == 0x49:
                 outbound_msg = can.Message(arbitration_id=0x0025ABCD, data=[0x01, 0x00, 0x01], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-6')
+                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-6 (Ending Packet Wrapper)')
                 bus.send(outbound_msg)
 
         elif (inbound_msg.arbitration_id == 0x00010000 and poll_count > 0):
