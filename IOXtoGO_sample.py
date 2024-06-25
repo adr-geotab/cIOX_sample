@@ -1,23 +1,7 @@
-#!/usr/bin/python3
-#
-# simple_rx_test.py
-#
-# This is simple CAN receive python program. All messages received are printed out on screen.
-# For use with PiCAN boards on the Raspberry Pi
-# http://skpang.co.uk/catalog/pican2-canbus-board-for-raspberry-pi-2-p-1475.html
-#
-# Make sure Python-CAN is installed first http://skpang.co.uk/blog/archives/1220
-#
-# 01-02-16 SK Pang
-#
-#
-#
-
 import can
 import time
 import datetime
 import os
-
 
 print('\n\rCAN Rx test')
 print('Bring up CAN0....')
@@ -41,15 +25,12 @@ try:
 
         print(datetime.datetime.fromtimestamp(message.timestamp),
               hex(message.arbitration_id), hex(message.dlc), ''.join(format(x, '02x') for x in message.data), end='')
-
-
         
         if (message.arbitration_id == 0x00010000 and count == 0): 
             count += 1
             print("|| Handshaking")
             msg = can.Message(arbitration_id=0x0002ABCD, data=[0x01,0x01,0x00, 0x07, 0x01, 0x00, 0x00, 0x9A])
             print(f'Sending Poll Response 0x0{msg.arbitration_id:X}')
-            # print(msg)
             bus.send(msg)
         elif (message.arbitration_id == 0x0014ABCD): 
             print(f"|| Acknowledged", end=' ')
@@ -78,7 +59,6 @@ try:
 
         elif (message.arbitration_id == 0x00010000 and count >0):
             count +=1
-            # print("|| Idle Process")
             print('|| Poll Request')
             msg = can.Message(arbitration_id=0x0002ABCD, data=[0x00])
             print(f'Sending Poll Response 0x0{msg.arbitration_id:X}')
@@ -89,7 +69,6 @@ try:
         else:
             print('|| Unclassified Message')
         
-        # if (count >0 and count%3 == 0): 
         if count == 2:
             count += 1
             print("Sending External Device ID 0x1DABCD")
