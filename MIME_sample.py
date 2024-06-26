@@ -19,7 +19,7 @@ print('Commencing communication session...\n')
 # print('Direction: DateTime ArbitrationID, DLC, [Payload] || Description')
 
 try:
-    while True:
+    while True:  
         inbound_msg = bus.recv()  # Wait until a message is received.
         print('GO->cIOX:', datetime.datetime.fromtimestamp(inbound_msg.timestamp), f'0x{inbound_msg.arbitration_id:08X}', hex(inbound_msg.dlc), ''.join(format(x, '02x') for x in inbound_msg.data)+(' ' if inbound_msg.data else ''), end='')
         
@@ -72,12 +72,31 @@ try:
             bus.send(outbound_msg)
 
         elif inbound_msg.arbitration_id == 0x260000:
-            print('|| GO Status Information Log')
+            print('|| GO Status Information Log', end='')
+            if inbound_msg.data[0] == 0x00 and inbound_msg.data[1] == 0x00:
+                if inbound_msg.data[2] == 0x00:
+                    print(' (Ignition off)')
+                elif inbound_msg.data[2] == 0x01:
+                    print(' (Ignition on)')
+            elif inbound_msg.data[0] == 0x01 and inbound_msg.data[1] == 0x00:
+                if inbound_msg.data[2] == 0x00:
+                    print(' (Modem is not ready)')
+                elif inbound_msg.data[2] == 0x01:
+                    print(' (Modem is available)')
+            else:
+                print()
+
+
+        elif inbound_msg.arbitration_id == 0x040000:
+            print('|| Wakeup')
 
         elif inbound_msg.arbitration_id == 0x1CABCD:
             print('|| GO Accept Message to Buffer')
             if inbound_msg.data[0] == 0x00 and inbound_msg.data[1] == 0x00:
                 print(f"\033[93mWARNING: Modem transmission failed. This typically indicates that it is not connected. The MIME content was not transferred.\033[0m")
+
+        elif inbound_msg.arbitration_id == 0x260000:
+            print('|| GO Status Information Log')
 
         else:
             print('|| Unclassified Message')
@@ -88,3 +107,8 @@ except KeyboardInterrupt:
     # Catch keyboard interrupt
     os.system("sudo /sbin/ip link set can0 down")
     print('\n\rKeyboard interrupt')
+
+except Exception as e:
+    os.system("sudo /sbin/ip link set can0 down")
+    print(f"An error occurred: {type(e).__name__}")
+    print(f"Error details: {e}")
