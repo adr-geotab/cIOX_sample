@@ -8,6 +8,7 @@ print('Bringing up CAN0...')
 os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
 time.sleep(0.1)
 poll_count = 0
+outbound_msg = None
 
 # Template communication session with basic identifiers and poll responses
 
@@ -70,6 +71,9 @@ try:
             
         elif inbound_msg.arbitration_id == 0x260000:
             print('|| GO Status Information Log')
+        
+        elif inbound_msg.arbitration_id == 0x270000:
+            print('|| GO Multi-Frame Data')
 
         else:
             print('|| Unclassified Message')
