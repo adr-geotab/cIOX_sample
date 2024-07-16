@@ -8,12 +8,9 @@ print('Bringing up CAN0...')
 os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
 time.sleep(0.1)
 poll_count = 0
-mime_count = 0
 outbound_msg = None
 
-# MIME Message to be Sent
-# type: image/jpeg
-# payload: Firmware init
+# Template communication session with basic identifiers and poll responses
 
 try:
     bus = can.interface.Bus(channel='can0', bustype='socketcan')
@@ -41,40 +38,9 @@ try:
 
             if poll_count == 2:
                 poll_count += 1
-                outbound_msg = can.Message(arbitration_id=0x0025ABCD, data=[0x01, 0x00, 0x00], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-1 (Beginning Packet Wrapper)')
+                outbound_msg = can.Message(arbitration_id=0x0025ABCD, data=[0x02, 0x00, 0x01], timestamp=time.time())
+                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| Request GO Device Data Message')
                 bus.send(outbound_msg)
-                mime_count += 1
-
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x0025ABCD' and mime_count == 1:
-                outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x00, 0x0A, 0x69, 0x6D, 0x61, 0x67, 0x65, 0x2F], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-2 (MIME Type)')
-                bus.send(outbound_msg)
-                mime_count += 1
-
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_count == 2:
-                outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x6A, 0x70, 0x65, 0x67, 0x0C, 0x00, 0x00, 0x00], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-3 (MIME Type)')
-                bus.send(outbound_msg)
-                mime_count += 1
-
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_count == 3:
-                outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x46, 0x69, 0x72, 0x6D, 0x77, 0x61, 0x72, 0x65], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-4 (MIME Payload)')
-                bus.send(outbound_msg)
-                mime_count += 1
-            
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_count == 4:
-                outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x49, 0x6E, 0x69, 0x74], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-5 (MIME Payload)')
-                bus.send(outbound_msg)
-                mime_count += 1
-
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_count == 5:
-                outbound_msg = can.Message(arbitration_id=0x0025ABCD, data=[0x01, 0x00, 0x01], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-6 (Ending Packet Wrapper)')
-                bus.send(outbound_msg)
-                mime_count += 1
 
         elif (inbound_msg.arbitration_id == 0x00010000 and poll_count > 0):
             poll_count +=1
@@ -108,9 +74,12 @@ try:
                 print(f"\033[93mWARNING: Modem transmission failed. This typically indicates that it is not connected. The MIME content was not transferred.\033[0m")
             elif inbound_msg.data[0] == 0x00 and inbound_msg.data[1] == 0x00:
                 print('(Success)')
-    
+            
         elif inbound_msg.arbitration_id == 0x260000:
             print('|| GO Status Information Log')
+        
+        elif inbound_msg.arbitration_id == 0x270000:
+            print('|| GO Multi-Frame Data')
 
         else:
             print('|| Unclassified Message')

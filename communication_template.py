@@ -29,7 +29,7 @@ try:
         if (inbound_msg.arbitration_id == 0x00010000 and poll_count == 0): 
             poll_count += 1
             print("|| Poll Request")
-            outbound_msg = can.Message(arbitration_id=0x0002ABCD, data=[0x01, 0x01, 0x00, 0x07, 0x01, 0x00, 0x00, 0x9A], timestamp=time.time())
+            outbound_msg = can.Message(arbitration_id=0x0002ABCD, data=[0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], timestamp=time.time())
             print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| Poll Response (Handshake)')
             bus.send(outbound_msg)
 
