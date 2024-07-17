@@ -8,7 +8,7 @@ print('Bringing up CAN0...')
 os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
 time.sleep(0.1)
 poll_count = 0
-mime_count = 0
+mime_count = -1
 outbound_msg = None
 
 # MIME Message to be Sent
@@ -41,11 +41,18 @@ try:
 
             if poll_count == 2:
                 poll_count += 1
+                outbound_msg = can.Message(arbitration_id=0x001DABCD, data=[0x01, 0x01, 0x70, 0x10, 0x01, 0x00], timestamp=time.time())
+                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| Send External device ID')
+                bus.send(outbound_msg)
+                mime_count += 1
+                time.sleep(1)
+
+            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x001DABCD' and mime_count == 0:
                 outbound_msg = can.Message(arbitration_id=0x0025ABCD, data=[0x01, 0x00, 0x00], timestamp=time.time())
                 print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-1 (Beginning Packet Wrapper)')
                 bus.send(outbound_msg)
                 mime_count += 1
-
+                
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x0025ABCD' and mime_count == 1:
                 outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x00, 0x0A, 0x69, 0x6D, 0x61, 0x67, 0x65, 0x2F], timestamp=time.time())
                 print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-2 (MIME Type)')
