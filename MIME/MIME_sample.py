@@ -8,7 +8,7 @@ print('Bringing up CAN0...')
 os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
 time.sleep(0.1)
 poll_count = 0
-mime_count = -1
+mime_index = 0
 outbound_msg = None
 
 # MIME Message to be Sent
@@ -40,48 +40,46 @@ try:
             print(f'|| Acknowledgement of 0x{prev_outbound_msg.arbitration_id:08X}')
 
             if poll_count == 2:
-                poll_count += 1
                 outbound_msg = can.Message(arbitration_id=0x001DABCD, data=[0x01, 0x01, 0x70, 0x10, 0x01, 0x00], timestamp=time.time())
-                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| Send External device ID')
+                print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| Send External Device ID')
                 bus.send(outbound_msg)
-                mime_count += 1
-                time.sleep(1)
 
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x001DABCD' and mime_count == 0:
+            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x0002ABCD' and poll_count == 4:
+                poll_count += 1
                 outbound_msg = can.Message(arbitration_id=0x0025ABCD, data=[0x01, 0x00, 0x00], timestamp=time.time())
                 print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-1 (Beginning Packet Wrapper)')
                 bus.send(outbound_msg)
-                mime_count += 1
+                mime_index += 1
                 
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x0025ABCD' and mime_count == 1:
+            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x0025ABCD' and mime_index == 1:
                 outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x00, 0x0A, 0x69, 0x6D, 0x61, 0x67, 0x65, 0x2F], timestamp=time.time())
                 print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-2 (MIME Type)')
                 bus.send(outbound_msg)
-                mime_count += 1
+                mime_index += 1
 
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_count == 2:
+            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_index == 2:
                 outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x6A, 0x70, 0x65, 0x67, 0x0C, 0x00, 0x00, 0x00], timestamp=time.time())
                 print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-3 (MIME Type)')
                 bus.send(outbound_msg)
-                mime_count += 1
+                mime_index += 1
 
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_count == 3:
+            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_index == 3:
                 outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x46, 0x69, 0x72, 0x6D, 0x77, 0x61, 0x72, 0x65], timestamp=time.time())
                 print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-4 (MIME Payload)')
                 bus.send(outbound_msg)
-                mime_count += 1
+                mime_index += 1
             
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_count == 4:
+            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_index == 4:
                 outbound_msg = can.Message(arbitration_id=0x000CABCD, data=[0x49, 0x6E, 0x69, 0x74], timestamp=time.time())
                 print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-5 (MIME Payload)')
                 bus.send(outbound_msg)
-                mime_count += 1
+                mime_index += 1
 
-            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_count == 5:
+            elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_index == 5:
                 outbound_msg = can.Message(arbitration_id=0x0025ABCD, data=[0x01, 0x00, 0x01], timestamp=time.time())
                 print('cIOX->GO:', datetime.datetime.fromtimestamp(outbound_msg.timestamp), f'0x{outbound_msg.arbitration_id:08X}', f'|| MIME-6 (Ending Packet Wrapper)')
                 bus.send(outbound_msg)
-                mime_count += 1
+                mime_index += 1
 
         elif (inbound_msg.arbitration_id == 0x00010000 and poll_count > 0):
             poll_count +=1
