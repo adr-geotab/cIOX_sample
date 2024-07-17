@@ -9,6 +9,7 @@ os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
 time.sleep(0.1)
 poll_count = 0
 mime_index = 0
+tx_ack_index = 0
 outbound_msg = None
 
 # MIME Message to be Sent
@@ -125,13 +126,25 @@ try:
         elif inbound_msg.arbitration_id == 0x040000:
             print('|| Wakeup')
 
-        elif inbound_msg.arbitration_id == 0x1CABCD:
+        elif inbound_msg.arbitration_id == 0x1CABCD and inbound_msg.data[0] == 0x00:
             print('|| GO Accept Message to Buffer', end=' ')
-            if inbound_msg.data[0] == 0x00 and inbound_msg.data[1] == 0x00:
+            if inbound_msg.data[1] == 0x00:
                 print('(Failed)')
                 print(f"\033[93mWARNING: Modem transmission failed. This typically indicates that it is not connected. The MIME content was not transferred.\033[0m")
-            elif inbound_msg.data[0] == 0x00 and inbound_msg.data[1] == 0x01:
+            elif inbound_msg.data[1] == 0x01:
                 print('(Success)')
+
+        elif inbound_msg.arbitration_id == 0x1CABCD and inbound_msg.data[0] == 0x05:
+            if inbound_msg.data[1] == 0x00:
+                print('|| External Device Channel Disabled')
+            elif inbound_msg.data[1] == 0x01:
+                print('|| External Device Channel Enabled')
+
+        elif inbound_msg.arbitration_id == 0x0BABCD:
+            print('|| TX Data')
+            tx_ack_index += 1
+            if tx_ack_index == 2:
+                print(f"\033[92mSUCCESS! The MyGeotab database has received the MIME message and it can be pulled via API.\033[0m")
     
         elif inbound_msg.arbitration_id == 0x260000:
             print('|| GO Status Information Log')
