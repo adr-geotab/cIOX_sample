@@ -2,13 +2,15 @@ import can
 import time
 import datetime
 import os
+from functions import *
 
 # Define the message to send over MIME
 mime_type = "text/plain"
 message_to_send = "This is a test MIME message that will be sent from the GO9 to the MyG cloud."
 
 # Print header
-print('\n\r== CAN MIME Outbound Custom Messaging Sample ==')
+print('\n\r== MIME Outbound Custom Messaging Sample ==')
+print('\nThis script sends a MIME message of custom type and content from the GO device to the MyG server.')
 print(f'MIME Type: {mime_type}')
 print(f'Message to Send: {message_to_send}')
 
@@ -49,61 +51,40 @@ print('Commencing communication session logging...\n')
 print('Direction |          DateTime          |    ArbID   | DLC |       Data       | Description')
 print('--------- | -------------------------- | ---------- | --- | ---------------- | --------------')
 
-def log_msg(direction, datetime, arb_id, dlc, data, desc='', end='\n'):
-    print(f"{direction} | {datetime} | 0x{arb_id:08X} | {hex(dlc)} | {''.join(format(x, '02X') for x in data).ljust(16, ' ')} | {desc}", end=end)
-
 try:
-    while True:  
+    while True:
         inbound_msg = bus.recv()  # Wait until a message is received.
-        log_msg('GO9->cIOX', datetime.datetime.fromtimestamp(inbound_msg.timestamp), inbound_msg.arbitration_id, inbound_msg.dlc, inbound_msg.data, end='')
+        print(f"cIOX->GO9 | {datetime.datetime.fromtimestamp(inbound_msg.timestamp)} | 0x{inbound_msg.arbitration_id:08X} | {hex(inbound_msg.dlc)} | {''.join(format(x, '02X') for x in inbound_msg.data).ljust(16, ' ')}", end=' | ')
         
         if (inbound_msg.arbitration_id == 0x00010000 and poll_count == 0): 
-            poll_count += 1
             print("Poll Request")
-            data = [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A]
-            outbound_msg = can.Message(arbitration_id=0x0002ABCD, data=data, timestamp=time.time())
-            log_msg('cIOX->GO9', datetime.datetime.fromtimestamp(outbound_msg.timestamp), outbound_msg.arbitration_id, len(data), data, 'Poll Response (Handshake)')
-            bus.send(outbound_msg)
+            outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
+            poll_count += 1
 
         elif (inbound_msg.arbitration_id == 0x0014ABCD): 
             print(f'Acknowledgement of 0x{prev_outbound_msg.arbitration_id:08X}')
 
             if poll_count == 2:
+                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
                 poll_count += 1
-                data = [0x01, 0x01, 0x70, 0x10, 0x01, 0x00]
-                outbound_msg = can.Message(arbitration_id=0x001DABCD, data=data, timestamp=time.time())
-                log_msg('cIOX->GO9', datetime.datetime.fromtimestamp(outbound_msg.timestamp), outbound_msg.arbitration_id, len(data), data, 'Send External Device ID')
-                bus.send(outbound_msg)
 
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x0002ABCD' and poll_count == 4:
+                outbound_msg = send_outbound_msg(bus, 0x0025ABCD, [0x01, 0x00, 0x00], 'MIME-1 (Beginning Packet Wrapper)')
                 poll_count += 1
-                data = [0x01, 0x00, 0x00]
-                outbound_msg = can.Message(arbitration_id=0x0025ABCD, data=data, timestamp=time.time())
-                log_msg('cIOX->GO9', datetime.datetime.fromtimestamp(outbound_msg.timestamp), outbound_msg.arbitration_id, len(data), data, 'MIME-1 (Beginning Packet Wrapper)')
-                bus.send(outbound_msg)
                 mime_index += 1
 
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' in ('0x0025ABCD', '0x000CABCD') and mime_index > 0 and mime_index <= len(grouped_payloads):
-                data = grouped_payloads[mime_index-1]
-                outbound_msg = can.Message(arbitration_id=0x000CABCD, data=data, timestamp=time.time())
-                log_msg('cIOX->GO9', datetime.datetime.fromtimestamp(outbound_msg.timestamp), outbound_msg.arbitration_id, len(data), data, f'MIME-{mime_index} (MIME Rx)')
-                bus.send(outbound_msg)
+                outbound_msg = send_outbound_msg(bus, 0x000CABCD, grouped_payloads[mime_index-1], f'MIME-{mime_index} (MIME Rx)')
                 mime_index += 1
 
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_index-1 == len(grouped_payloads):
-                data = [0x01, 0x00, 0x01]
-                outbound_msg = can.Message(arbitration_id=0x0025ABCD, data=data, timestamp=time.time())
-                log_msg('cIOX->GO9', datetime.datetime.fromtimestamp(outbound_msg.timestamp), outbound_msg.arbitration_id, len(data), data, f'MIME-{mime_index} (Ending Packet Wrapper)')
-                bus.send(outbound_msg)
+                outbound_msg = send_outbound_msg(bus, 0x0025ABCD, [0x01, 0x00, 0x01], f'MIME-{mime_index} (Ending Packet Wrapper)')
                 mime_index += 1
 
         elif (inbound_msg.arbitration_id == 0x00010000 and poll_count > 0):
             poll_count +=1
             print('Poll Request')
-            data = [0x00]
-            outbound_msg = can.Message(arbitration_id=0x0002ABCD, data=data, timestamp=time.time())
-            log_msg('cIOX->GO9', datetime.datetime.fromtimestamp(outbound_msg.timestamp), outbound_msg.arbitration_id, len(data), data, 'Poll Response')
-            bus.send(outbound_msg)
+            outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x00], 'Poll Response')
 
         elif inbound_msg.arbitration_id == 0x260000:
             print('GO Status Information Log', end='')
