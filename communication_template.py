@@ -81,7 +81,7 @@ try:
         prev_outbound_msg = outbound_msg
 
 except KeyboardInterrupt:
-    print('\n\rKeyboard interrupt\nBringing down CAN0...')
+    print('\n\rEncountered user-induced keyboard interrupt\nBringing down CAN0...')
     os.system("sudo /sbin/ip link set can0 down")
 
 except Exception as e:

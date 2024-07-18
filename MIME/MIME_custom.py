@@ -3,11 +3,14 @@ import time
 import datetime
 import os
 
-print('\n\rCAN MIME Sample')
-
 # Define the message to send over MIME
-mime_type = "image/jpeg"
-message_to_send = "FirmwareInit"
+mime_type = "text/plain"
+message_to_send = "This is a test MIME message."
+
+# Print header
+print('\n\r== CAN MIME Custom Messaging Sample ==')
+print(f'MIME Type: {mime_type}')
+print(f'Message to Send: {message_to_send}')
 
 # Define the total payload byte array. Append info length in little-endian 1,4 bytes and ASCII vals of strs
 total_payload = bytearray()
@@ -17,18 +20,17 @@ total_payload.extend([0x00, len(mime_type)])
 total_payload.extend(ord(char) for char in mime_type)
 total_payload.extend(len(message_to_send).to_bytes(4, byteorder='little'))
 total_payload.extend(ord(char) for char in message_to_send)
-print(total_payload)
 
 # Group the payload into 8 byte arrays, and print
 grouped_payloads = [total_payload[i:i+8] for i in range(0, len(total_payload), 8)]
-print('01 00 00')
+print('\nHere is the MIME Rx payload:\n01 00 00')
 for msg in [list(_) for _ in grouped_payloads]:
     for byte in msg:
         print(f'{byte:02X}', end=' ')
     print()
 print('01 00 01\n')
 
-# Start up CAN
+# Initialization and CAN startup
 print('Bringing up CAN0...')
 os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
 time.sleep(0.1)
@@ -36,14 +38,13 @@ poll_count = 0
 mime_index = 0
 tx_ack_index = 0
 outbound_msg = None
-
 try:
     bus = can.interface.Bus(channel='can0', bustype='socketcan')
 except OSError:
-    print('Cannot find PiCAN board.')
+    print("\033[91mCannot find PiCAN board. Please ensure that the PiCAN is configured properly.\033[0m")
     exit()
 
-print('Commencing communication session...\n')
+print('Commencing communication session logging...\n')
 # print('Direction: DateTime ArbitrationID, DLC, [Payload] || Description')
 
 try:
@@ -152,7 +153,7 @@ try:
         prev_outbound_msg = outbound_msg
 
 except KeyboardInterrupt:
-    print('\n\rKeyboard interrupt\nBringing down CAN0...')
+    print('\n\rEncountered user-induced keyboard interrupt\nBringing down CAN0...')
     os.system("sudo /sbin/ip link set can0 down")
 
 except Exception as e:
