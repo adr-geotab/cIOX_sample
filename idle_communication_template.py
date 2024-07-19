@@ -3,10 +3,6 @@ import can
 import time
 import datetime
 import os
-import sys
-
-# Import functions.py from parent directory
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from functions import *
 
 # Print header
@@ -16,7 +12,7 @@ print('This script reads inbound CAN messages, responds to poll requests, and se
 # Initialization and CAN startup
 poll_index = 0
 outbound_msg, prev_outbound_msg = None, None
-print('Bringing up CAN0...')
+print('\nBringing up CAN0...')
 os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
 time.sleep(0.1)
 try:
