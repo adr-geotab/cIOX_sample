@@ -1,7 +1,7 @@
 # source : https://github.com/muyuncaigeotab/hardware-demo/tree/main/pycan_demo/Hardware
 
 import can
-import IOXcan_HardwareLib
+import legacy.IOXcan_HardwareLib as IOXcan_HardwareLib
 
 # Initializing canbus
 canbus = can.interface.Bus(channel='can0', bustype='socketcan')
