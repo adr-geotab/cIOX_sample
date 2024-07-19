@@ -6,8 +6,8 @@ import os
 from functions import *
 
 # Print header
-print('\n\r== Idle Communication Template ==')
-print('This script reads inbound CAN messages, responds to poll requests, and sends external device ID')
+print('\n\r== Outbound Data Transfer Script ==')
+print('This script transfers data from the IOX to the GO device. This includes samples of message type 0x1D (single frame data log) and 0x1E (multi frame data log).')
 
 # Initialization and CAN startup
 poll_index, datalog_index = 0, 0

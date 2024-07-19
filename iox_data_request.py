@@ -1,3 +1,5 @@
+
+# Import libraries
 import can
 import time
 import datetime
@@ -5,13 +7,13 @@ import os
 from functions import *
 
 # Print header
-print('\n\r== Idle Communication Template ==')
-print('This script reads inbound CAN messages, responds to poll requests, and sends external device ID')
+print('\n\r== IOX Data Request Script ==')
+print('This script requests and reads multi-frame data from the GO device of message type 0x27.')
 
 # Initialization and CAN startup
-poll_count = 0
+poll_index = 0
 outbound_msg, prev_outbound_msg = None, None
-print('Bringing up CAN0...')
+print('\nBringing up CAN0...')
 os.system("sudo /sbin/ip link set can0 up type can bitrate 500000")
 time.sleep(0.1)
 try:
@@ -32,20 +34,16 @@ try:
         classify_inbound_msg(inbound_msg, prev_outbound_msg)
         
         if (inbound_msg.arbitration_id == 0x00010000): 
-            if poll_count == 0:
+            if poll_index == 0:
                 outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
             else:
                 outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x00], 'Poll Response')
-            poll_count += 1
+            poll_index += 1
 
         elif (inbound_msg.arbitration_id == 0x0014ABCD): 
-            if poll_count == 2:
-                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
-                poll_count += 1
- 
-            elif poll_count == 4:
-                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x00, 0xD2, 0x0A, 0x01, 0x64], 'Send Status Data')
-                poll_count += 1
+            if poll_index == 2:
+                outbound_msg = send_outbound_msg(bus, 0x0025ABCD, [0x02, 0x00, 0x01], 'Request GO Device Data')
+                poll_index += 1
 
         prev_outbound_msg = outbound_msg
 

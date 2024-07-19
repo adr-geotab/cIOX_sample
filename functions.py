@@ -55,6 +55,9 @@ def classify_inbound_msg(inbound_msg, prev_outbound_msg):
     elif inbound_msg.arbitration_id == 0x260000:
         print('GO Status Information Log')
 
+    elif inbound_msg.arbitration_id == 0x27ABCD:
+        print(f'GO Multi-Frame Data (Frame {inbound_msg.data[0]})')
+
     else:
         print('Unclassified Message')
     
