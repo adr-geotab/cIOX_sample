@@ -3,6 +3,10 @@ import can
 import time
 import datetime
 import os
+import sys
+
+# Import functions.py from parent directory
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from functions import *
 
 # Print header
