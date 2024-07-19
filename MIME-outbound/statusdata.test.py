@@ -42,6 +42,10 @@ try:
             if poll_count == 2:
                 outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
                 poll_count += 1
+ 
+            elif poll_count == 4:
+                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x00, 0xD2, 0x0A, 0x01, 0x64], 'Send Status Data')
+                poll_count += 1
 
         prev_outbound_msg = outbound_msg
 

@@ -10,6 +10,7 @@ def send_outbound_msg(bus, arb_id, data, desc):
 
     return outbound_msg
 
+# Print the type of inbound message based on data and arbitration id
 def classify_inbound_msg(inbound_msg, prev_outbound_msg):
     if (inbound_msg.arbitration_id == 0x00010000): 
         print("Poll Request")
