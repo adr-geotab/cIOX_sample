@@ -12,6 +12,7 @@ This script runs on the IOX device and listens for incoming CAN messages from th
 ### Deoding the MIME Message
 This script decodes the MIME message by first identifying which four bytes are associated with communicating the payload length. This indexing is done using Byte 1 of the first 0x0B message, which identifies the length of the MIME type because the MIME payload length immediately follows the MIME type. The length is converted from Little Endian, which provides the bytes associated with the payload. From here, a buffer is filled for both the MIME content and array depending on the iteration's byte index. The payload is converted from hex to ASCII to render legible content. Based on the payload and type length, the expected MIME length is computed, and the message is logged once this threshold is met.
 
-### Sample CAN Logging from Python Script
+### Sample CAN Logging from Inbound MIME Message
 
-(Sample Logging Image/Table Here)
+![Inbound MIME Message](../images/mime_inbound.png)
+The MIME type and content align with the payload constructed from the API call executed in [MIME_send.js](MIME_send.js). Depending on cellular connectivity, there may be a few seconds of latency before the GO device receives the message from the cloud.

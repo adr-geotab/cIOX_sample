@@ -16,11 +16,13 @@ Before bringing up the CAN bus, the script converts the string MIME type and MIM
 
 ### Sample CAN Logging from Python Script
 
-(Sample Logging Image/Table Here)
+![Communication session for outbound MIME transmission](../images/mime_outbound.png)\
+The reception of the TX data 0x0B confirms that the MIME message has been pushed to the cloud.
 
 ## MIME_retrieve.js
 This script is responsible for retriving the MIME message sent from the GO device. The script contains a function that makes an API get call for the [TextMessage](https://developers.geotab.com/myGeotab/apiReference/objects/TextMessage) entity. The function then filters to only include TextMessages that were sent from the vehicle within the last 24 hours, and are of MIME type. These objects are then sorted by Sent property, ascending. Each TextMessage object then gets a property added within the messageContent sub-object named decodedData that decodes the received message from base64 to ASCII. MyG internally re-constructs the payload from MIME protocol; this is not done in the JS script. An array of TextMessage objects with the applied modifications is logged to the console as the output.
 
 ### Sample Retrieved MIME Message
 
-(Sample Output Image/JSON Here)
+Using [MIME_retrieve.js](MIME_retrieve.js), we can extract and decode the message from the MyGeotab server:
+![MyGeotab cloud interface, confirming reception of the message](../images/mime_myg_reception.png)

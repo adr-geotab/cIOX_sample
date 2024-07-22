@@ -9,8 +9,8 @@ This script is responsible for requesting GO data and reading the response. It r
 The GO device receives this message and in response pushes a 0x27 multi-frame data log containing information associated with time, location, speed, odometer, RPM, engine hours, etc. Changing the payload of the outbound 0x25 message (specifically the first two bytes) will render different GO data logs in response.
 
 ### Sample CAN Logging of IOX Data Request
-
-(Sample Logging Image/Table Here)
+Here is a sample log of requesting and receiving 0x27 type 0x02 data:
+![alt text](../images/iox_data_request.png)
 
 ## outbound_data_transfer.py
 This script is responsible for sending both multi-frame and single-frame data logs to the GO device. It runs on the IOX device, logs all inbound messages, and has five primary functions.
@@ -23,5 +23,5 @@ This script is responsible for sending both multi-frame and single-frame data lo
 Unlike MIME messaging, the GO device does not confirm the reception of messages, other than the 0x14 ACK messages. The payloads can be adjusted to send different values or types of data to the GO device based on the 0x1D and 0x1E [IOX protocol documentation](https://developers.geotab.com/hardware/guides/IOExpanderProtocol#commands).
 
 ### Sample CAN Logging of Outbound Data Transfer
-
-(Sample Logging Image/Table Here)
+Here is a sample of sending single-frame and multi-frame data logs under structures 0x1D and 0x1E:
+![Outbound data transfer](../images/outbound_data_transfer.png)
