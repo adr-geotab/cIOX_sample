@@ -20,7 +20,7 @@ This script is responsible for sending both multi-frame and single-frame data lo
 4. After the previous outbound message is acknowledged by the GO device (0x14), the IOX pushes status data in a single frame data log indicating a value of 100 for the time since engine start (0x1D type 0x00).
 5. After the previous outbound message is acknowledged by the GO device (0x14), the IOX sends *priority* status data in a single frame data log indicating a value of 100 for the time since engine start (0x1D type 0x03).
 
-Unlike MIME messaging, the GO device does not confirm the reception of messages, other than the 0x14 ACK messages.
+Unlike MIME messaging, the GO device does not confirm the reception of messages, other than the 0x14 ACK messages. The payloads can be adjusted to send different values or types of data to the GO device based on the 0x1D and 0x1E [IOX protocol documentation](https://developers.geotab.com/hardware/guides/IOExpanderProtocol#commands).
 
 ### Sample CAN Logging of Outbound Data Transfer
 
