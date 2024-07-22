@@ -50,11 +50,11 @@ try:
                 datalog_index += 1
 
             elif datalog_index == 1:
-                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x00, 0x00, 0x07, 0x00, 0x01, 0x23, 0x45, 0x67], 'Send Multi-Frame Log 1')
+                outbound_msg = send_outbound_msg(bus, 0x001EABCD, [0x00, 0x00, 0x07, 0x00, 0x01, 0x23, 0x45, 0x67], 'Send Multi-Frame Log 1')
                 datalog_index += 1
 
             elif datalog_index == 2:
-                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x01, 0x89, 0xAB, 0xCD], 'Send Multi-Frame Log 2')
+                outbound_msg = send_outbound_msg(bus, 0x001EABCD, [0x01, 0x89, 0xAB, 0xCD], 'Send Multi-Frame Log 2')
                 datalog_index += 1
 
             elif datalog_index == 3:

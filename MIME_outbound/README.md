@@ -4,7 +4,7 @@ This directory demonstrates how to send and receive MIME messages going from the
 The MIME protocol can be used to exchange data between MyGeotab and an external device when the total message size exceeds the packet. To learn more about payload structuring under the MIME protocol, visit the [Geotab docs](https://developers.geotab.com/hardware/guides/mimeProtocol).
 
 ## MIME_outbound_sample.py
-This script runs on the IOX device, and has three primary functions.
+This script runs on the IOX device, logs all inbound messages, and has three primary functions.
 1. Upon bringing up the CAN bus, the IOX handshakes (0x02) in response to the first poll request (0x01) and responds to all other poll requests. 
 2. After the second poll request is acknowledged by the GO device (0x14), the IOX declares its device ID in a single frame data log (0x1D). This permits the received RX data (0x0C) to be pushed to the modem's socket buffer, which is necessary for transmission to the MyGeotab server.
 3. After the third poll request is acknowledged by the GO device (0x14), the IOX initiates the process of pushing the constructed MIME message to the GO device. It first sends the beginning packet wrapper (0x25 type 0x01), then the MIME payload through RX data (0x0C), then the ending packet wrapper (0x25 type 0x01). Between each message, the script waits for the GO's acknowledgement of each message (0x14). 
