@@ -18,14 +18,14 @@ The scripts capture and log all inbound and outbound messages over the CAN bus, 
 ![Inbound MIME Message Logging](images/mime_inbound.png)
 
 The logging table contains the following information for each message:
-| Log Column Title | Definition |
-|--------------|------------|
-| Direction | The direction of the message through the CAN bus |
-| DateTime | The time at which the message traverses the CAN bus |
-| ArbID | The arbitration ID of the message |
-| DLC | The length of the payload, in bytes |
-| Data | The payload of the message, displayed in hexadecimal |
-| Description | The effect of the message, classified by its arbitration ID and payload
+| Log Field | Definition |
+|-----------|------------|
+| Direction | Indicates whether the message was sent or received, providing context on the flow of data through the CAN bus |
+| DateTime | Records the time at which the message traverses the CAN bus |
+| ArbID | Displays the arbitration ID of the message, as used in the arbitration process |
+| DLC | Shows the Data Length Code, a field in the CAN frame specifying the length of the payload in bytes |
+| Data | Contains the payload of the message, displayed in hexadecimal |
+| Description | Provides a narrative or classification of the message's effect based on the arbitration ID and payload |
 
 ## Directory Structure
 ### MIME_inbound
