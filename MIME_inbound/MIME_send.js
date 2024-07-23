@@ -28,4 +28,4 @@ function sendTextMessage(deviceID, mimeType, mimeContent) {
 }
 
 // Ensure that the device ID is correct; we used b21 for this sample.
-sendTextMessage("b21", "text/mardown", "The quick brown fox jumps over the lazy dog, while the cat watches calmly from its spot on the sofa.");
+sendTextMessage("b21", "text/markdown", "The quick brown fox jumps over the lazy dog, while the cat watches calmly from its spot on the sofa.");
