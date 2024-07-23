@@ -10,6 +10,7 @@ The GO device receives this message and in response pushes a 0x27 multi-frame da
 
 ### Sample CAN Logging of IOX Data Request
 Here is a sample log of requesting and receiving 0x27 type 0x02 data:
+
 ![alt text](../images/iox_data_request.png)
 
 ## outbound_data_transfer.py
@@ -24,4 +25,5 @@ Unlike MIME messaging, the GO device does not confirm the reception of messages,
 
 ### Sample CAN Logging of Outbound Data Transfer
 Here is a sample of sending single-frame and multi-frame data logs under structures 0x1D and 0x1E:
+
 ![Outbound data transfer](../images/outbound_data_transfer.png)

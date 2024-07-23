@@ -1,7 +1,31 @@
-# Custom IOX Embedded Communication Samples via CAN
-This repository offers a comprehensive set of sample scripts designed for embedded development and testing of custom Input/Output Expander (IOX) devices. These scripts facilitate communication between the IOX device, the GO device, and MyGeotab servers through the CAN bus and MyGeotab cloud interfaces.
+# cIOX Embedded Communication Samples via CAN
+This repository offers a comprehensive set of sample scripts designed for embedded development and testing of custom Input/Output Expander (cIOX) devices. These scripts facilitate communication between the IOX device, the GO device, and MyGeotab servers through the CAN bus and MyGeotab cloud interfaces.
 
-The repository offers practical examples of CAN and cloud interactions with the IOX device, aiming to improve understanding and implementation of the IOX protocol. These samples help developers and integrators streamline their testing and development processes, ensuring reliable communication and accurate data exchange within the embedded system.
+The repository offers practical examples of IOX device interactions over CAN and the MyGeotab cloud, aiming to improve understanding and implementation of the IOX protocol. These samples help developers and integrators streamline their testing and development processes, ensuring reliable communication and accurate data exchange within the embedded system.
+
+## Functionality Overview
+This repository is designed to deepen the understanding of the IOX protocol by providing examples of key communication processes, entailing the following:
+
+### IOX Internal Logic
+The repository includes scripts that demonstrate how to read and process inbound CAN messages, construct outbound messages from the IOX device, and transmit them over the CAN bus to the GO device. These messages can then be sent to MyGeotab servers, facilitating cloud-based interactions.
+
+### MyGeotab Cloud Interactions
+The scripts also cover how to use the MyGeotab API to send and receive information over the cloud. This includes handling the transmission of data from the GO device to the MyGeotab servers and retrieving it for further processing.
+
+### Message Logging
+The scripts capture and log all inbound and outbound messages over the CAN bus, allowing developers to monitor and analyze the data exchanged between the IOX and GO devices. This logging functionality helps in debugging and ensures that the data flow is as expected. Here is an example of a MIME message being read and decoded by the IOX:
+
+![Inbound MIME Message Logging](images/mime_inbound.png)
+
+The logging table contains the following information for each message:
+| Log Column Title | Definition |
+|--------------|------------|
+| Direction | The direction of the message through the CAN bus |
+| DateTime | The time at which the message traverses the CAN bus |
+| ArbID | The arbitration ID of the message |
+| DLC | The length of the payload, in bytes |
+| Data | The payload of the message, displayed in hexadecimal |
+| Description | The effect of the message, classified by its arbitration ID and payload
 
 ## Directory Structure
 ### MIME_inbound

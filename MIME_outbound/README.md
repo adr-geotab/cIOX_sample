@@ -25,4 +25,5 @@ This script is responsible for retriving the MIME message sent from the GO devic
 ### Sample Retrieved MIME Message
 
 Using [MIME_retrieve.js](MIME_retrieve.js), we can extract and decode the message from the MyGeotab server:
+
 ![MyGeotab cloud interface, confirming reception of the message](../images/mime_myg_reception.png)

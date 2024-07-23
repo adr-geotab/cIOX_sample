@@ -14,5 +14,5 @@ This script decodes the MIME message by first identifying which four bytes are a
 
 ### Sample CAN Logging from Inbound MIME Message
 
-![Inbound MIME Message](../images/mime_inbound.png)
+![Inbound MIME Message](../images/mime_inbound.png)\
 The MIME type and content align with the payload constructed from the API call executed in [MIME_send.js](MIME_send.js). Depending on cellular connectivity, there may be a few seconds of latency before the GO device receives the message from the cloud.
