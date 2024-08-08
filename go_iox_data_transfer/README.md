@@ -8,6 +8,8 @@ This script is responsible for requesting GO data and reading the response. It r
 
 The GO device receives this message and in response pushes a 0x27 multi-frame data log containing information associated with time, location, speed, odometer, RPM, engine hours, etc. Changing the payload of the outbound 0x25 message (specifically the first two bytes) will render different GO data logs in response.
 
+The `iox_data_request2.py` file sends two identification requests from the GO device; one requesting its serial number (0x25 type 0x12 type 0x00) and another requesting its firmware version (0x25 type 0x12 type 0x01). The GO responds with a multi-frame data log (0x27) of type 0x12. Each byte is an ASCII character for the serial number for the type 0x00 request. For the 0x02 data log, each firmware version component product, major, and minor consists of two bytes in Little Endian. Byte 0 of each of these messages confirms the payload type. This way a payload 0x78 0x00 0x2A 0x00 0x1D 0x00 would be decoded as firmware version 120.42.29, isolating from the 0x25 overhead and the data log frame counter.
+
 ### Sample CAN Logging of IOX Data Request
 
 (Sample Logging Image/Table Here)
