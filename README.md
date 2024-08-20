@@ -48,7 +48,6 @@ The following resources pertain to the IOX communication sample in this reposito
 - [IOX Protocol](https://developers.geotab.com/hardware/guides/IOExpanderProtocol)
 - [Sample IOX Communication Session over CAN](https://docs.google.com/document/d/1BExcPst5bNzv-IZGX6ZbPeHK5MO1s2AI0rqzEhHbNZ4)
 - [MyGeotab SDK API Runner](https://geotab.github.io/sdk/software/api/runner.html)
-- [CAN Protocol Reference](https://developers.geotab.com/hardware/protocolReference/can)
 - [MIME Protocol](https://developers.geotab.com/hardware/guides/mimeProtocol)
 
 
