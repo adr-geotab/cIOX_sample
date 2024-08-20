@@ -38,7 +38,7 @@ Scripts in this directory manage the construction and transmission of MIME messa
 This directory contains scripts for transferring single-frame and multi-frame data log types 0x1D, 0x1E, and 0x27 between the IOX and GO devices. This entails the requesting, transmission, and retrieval of status, priority, and free-format third party data. For a comprehensive overview, see [here](GO_IOX_data_transfer/README.md).
 
 ### custom_messaging
-This directory contains scripts for transferring single-frame and multi-frame data log types 0x1D, 0x1E, and 0x27 between the IOX and GO devices. This entails the requesting, transmission, and retrieval of status, priority, and free-format third party data. For a comprehensive overview, see [here](GO_IOX_data_transfer/README.md).
+This directory includes scripts for sending and retrieving custom messages using 0x1E multi-frame data logs from an IOX device to a GO device via the CAN bus. The custom_messaging.py script constructs and sends the custom payloads, while custom_messaging_retrieve.js fetches and decodes these messages from the MyGeotab cloud. For further details, refer to the [custom_messaging README](custom_messaging/README.md).
 
 ### functions.py
 This script defines functions for sending messages over the CAN terminal and classifying inbound messages based on arbitration ID and payload. These functions are crucial for effective logging and payload handling.
