@@ -1,13 +1,21 @@
 # Custom Messaging Sample
-This directory demonstrates how to send custom messages from the IOX to the GO device over CAN and MyGeotab API. The data is transmitted in multi-frame data logs (0x1E) of the third party free format data type (0x00). A custom message is defined and constructed in 0x1E format, which is then sent to the GO device and subsequently pushed to the MyGeotab cloud. As such, this data is then read and then decoded to retrieve the original custom message. The multi-frame data log transmissions can occur at any time following the handshake. This custom messaging differs from [MIME messaging](../MIME_outbound) in that the payload length is limited to 27 bytes, there are no integrated content types, and that there are no 0x25 packet wrappers. As such, 0x1E logs are preferrable for more simple messaging.
+This directory demonstrates how to send custom messages from a custom IOX device to a GO device via the CAN bus and retrieve them from the MyGeotab API. The data is transmitted using multi-frame data logs (0x1E) of the third-party free format data type (0x00). This custom messaging method involves defining, constructing, and sending a message in the 0x1E format to the GO device, which then pushes the data to the MyGeotab cloud. After transmission, the data can be retrieved and decoded to reconstruct the original custom message.
+
+This 0x1E custom messaging approach differs from [MIME messaging](../MIME_outbound) in several ways:
+- Payload length is limited to 27 bytes (see more below).
+- No integrated content types are used.
+- Absence of 0x25 packet wrappers.
+- Absence of 0x0B TX MyG reception confirmation
+
+Consequently, 0x1E logs are preferable for simpler, lightweight messaging tasks.
 
 ## custom_messaging.py
-This script is responsible for constructing the payload from the custom message string then sending it to the GO device. It runs on the IOX device, logs all inbound messages, and has three primary functions.
-1. Upon bringing up the CAN bus, the IOX handshakes (0x02) in response to the first poll request (0x01) and responds to all other poll requests. 
-2. After the second poll request is acknowledged by the GO device (0x14), the IOX sends the external device ID through 0x1D type 0x01.
-3. Converts the custom string to properly structured 0x1E payloads, then sequentially sends the payloads upon 0x14 ACK responses from the previous payload.
+This script constructs the payload from the custom message string and sends it to the GO device. It operates on the IOX device, logging all inbound messages, and includes three primary functions:
+1. Upon initiating the CAN bus, the IOX device performs a handshake (0x02) in response to the initial poll request (0x01) and acknowledges all subsequent poll requests.
+2. After the GO device acknowledges the second poll request (0x14), the IOX sends the external device ID using 0x1D type 0x01.
+3. Converts the custom message string into properly structured 0x1E payloads and sequentially sends these payloads upon receiving 0x14 ACK responses for each preceding payload.
 
-The GO device receives the 0x1E multi-frame data log and pushes it to the MyGeotab cloud, which can be interacted with through the API. Unlike MIME messaging, the GO device does not confirm the reception of messages, other than the 0x14 ACK messages.
+The GO device receives the 0x1E multi-frame data log and forwards it to the MyGeotab cloud, which can be accessed via the API. Unlike MIME messaging, the GO device does not provide specific confirmation of message reception beyond the 0x14 ACK responses. Multi-frame data log transmissions can occur at any time post-handshake.
 
 ### Sample CAN Logging of Custom Messaging
 Here is a sample log of pushing a custom 0x1E multi-frame data log to the GO:
@@ -15,7 +23,7 @@ Here is a sample log of pushing a custom 0x1E multi-frame data log to the GO:
 ![Custom Messaging CAN Logs](../images/custom_messaging.png)
 
 ### Protocol Limitations
-The maximum length of the multi-frame log data must is 27 bytes. This does not include 0x1E structure overheads, such as frame counters or the data length and type identifier bytes. Since each character is converted to a byte, the maximum length of a message is 27 characters. Messages longer than this threshold will still be sent, but the GO device will truncate all characters following the 27th before sending the data to the server. Note that the inbound ACK messages are still the same and do not indicate an overflow. An example of this is shown below. When pulled from the API, the decoded result is "This message is too long to".
+The maximum length for multi-frame log data is 27 bytes, excluding the 0x1E structure overhead, such as frame counters and data length/type identifiers. Given that each character is represented as a byte, the maximum allowable message length is 27 characters. Messages exceeding this limit will be truncated to 27 characters by the GO device before transmission to the server. Note that the ACK messages remain unchanged and do not indicate truncation. For example, a message that exceeds the 27-character limit will appear truncated upon retrieval from the API, as shown below:
 
 ![Custom Messaging Warning](../images/custom_message_warning.png)
 

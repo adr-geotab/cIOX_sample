@@ -10,7 +10,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from functions import *
 
 # Define the message to send
-message_to_send = "This message is too long to send and will be truncated."
+message_to_send = "0x1E multi-frame datalog"
 
 # Print header
 print('\n\r== Custom Messaging Script ==')
