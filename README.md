@@ -46,13 +46,22 @@ This script defines functions for sending messages over the CAN terminal and cla
 ### idle_communication_template.py
 This script provides a minimal implementation for communication between the GO and IOX devices. Thus, it can serve as a template for GO/IOX interaction script development over the CAN bus. Upon bringing up the CAN bus, the IOX handshakes (0x02) in response to the first poll request (0x01) and responds to all other poll requests. After the second poll request is acknowledged by the GO device (0x14), the IOX declares its device ID in a single frame data log (0x1D).
 
+## Configuration
+These sample scripts are developed using the PiCAN board, which is a CAN bus interface for Raspberry Pi. CAN message transmission and reception are handled using the `python-can` library. API interactions are managed through the MyGeotab SDK API, accessible [here](https://geotab.github.io/sdk/software/api/runner.html). Scripts that control IOX behavior are implemented in Python, while API calls are executed in JavaScript.
+
+### Setting Up the Environment
+**Linux/macOS**: To install dependencies, run the following command in your terminal:
+```
+bash install_dependencies.sh
+```
+**Windows**: To install dependencies, run the following command in your PowerShell:
+```
+./install_dependencies.ps1
+```
+
 ## Resources
 The following resources pertain to the IOX communication sample in this repository:
 - [IOX Protocol](https://developers.geotab.com/hardware/guides/IOExpanderProtocol)
 - [Sample IOX Communication Session over CAN](https://docs.google.com/document/d/1BExcPst5bNzv-IZGX6ZbPeHK5MO1s2AI0rqzEhHbNZ4)
 - [MyGeotab SDK API Runner](https://geotab.github.io/sdk/software/api/runner.html)
 - [MIME Protocol](https://developers.geotab.com/hardware/guides/mimeProtocol)
-
-
-## Configuration
-These sample scripts are developed using the PiCAN board, which is a CAN bus interface for Raspberry Pi. CAN message transmission and reception are handled using the `python-can` library. API interactions are managed through the MyGeotab SDK API, accessible [here](https://geotab.github.io/sdk/software/api/runner.html). Scripts that control IOX behavior are implemented in Python, while API calls are executed in JavaScript.
