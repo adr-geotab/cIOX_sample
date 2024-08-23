@@ -5,7 +5,7 @@ This 0x1E custom messaging approach differs from [MIME messaging](../MIME_outbou
 - Payload length is limited to 27 bytes (see more below).
 - No integrated content types are used.
 - Absence of 0x25 packet wrappers.
-- Absence of 0x0B TX MyG reception confirmation
+- Absence of 0x0B TX MyG reception confirmation.
 
 Consequently, 0x1E logs are preferable for simpler, lightweight messaging tasks.
 
