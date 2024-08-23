@@ -31,6 +31,7 @@
 # Executables
 exc_idle_communication_template
 exc_iox_data_request
+exc_iox_data_request2
 *.exe
 *.out
 *.app

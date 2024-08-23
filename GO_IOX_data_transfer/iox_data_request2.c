@@ -24,9 +24,14 @@ void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_inde
         (*messaging_index)++;
     } else if ((frame->can_id & CAN_EFF_MASK) == 0x0014ABCD) {
         if (*messaging_index == 3) {
-            uint8_t response_data[] = {0x02, 0x00, 0x01};
+            uint8_t response_data[] = {0x0C, 0x00, 0x00};
             send_can_frame(sockfd, 0x0025ABCD, response_data, sizeof(response_data));
-            printf("Request GO Device Data\n");
+            printf("Request GO Serial Number\n");
+        }
+        else if (*messaging_index == 4) {
+            uint8_t response_data[] = {0x0C, 0x00, 0x01};
+            send_can_frame(sockfd, 0x0025ABCD, response_data, sizeof(response_data));
+            printf("Request GO Firmware Version\n");
         }
         (*messaging_index)++;
     }
