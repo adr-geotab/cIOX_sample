@@ -1,6 +1,6 @@
-#include "functions.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -12,6 +12,7 @@
 #include <net/if.h>
 #include <time.h>
 #include <sys/time.h>
+#include "functions.h"
 
 #define CAN_INTERFACE "can0"
 #define CAN_BITRATE 500000
@@ -103,7 +104,7 @@ void send_can_frame(int sockfd, uint32_t can_id, uint8_t *data, size_t data_len)
 }
 
 // Function to print the CAN frame
-void print_can_frame(struct can_frame *frame) {
+void print_can_frame(const struct can_frame *frame) {
     char datetime[64];
     struct timeval tv;
     gettimeofday(&tv, NULL);
@@ -118,5 +119,53 @@ void print_can_frame(struct can_frame *frame) {
     if (padding > 0) {
         printf("%*s", padding, " ");
     }
-    printf("| \n");
+    printf("| ");
+}
+
+// Function to classify CAN messages
+void classify_can_frame(const struct can_frame *inbound_frame, const struct can_frame *prev_outbound_frame) {
+
+    if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x00010000) {
+        printf("Poll Request\n");
+    } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x0014ABCD) {
+        printf("Acknowledgement of 0x%08X\n", prev_outbound_frame->can_id);
+    } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x260000) {
+        printf("GO Status Information Log");
+        if (inbound_frame->data[0] == 0x00 && inbound_frame->data[1] == 0x00) {
+            if (inbound_frame->data[2] == 0x00) {
+                printf(" (Ignition off)\n");
+            } else if (inbound_frame->data[2] == 0x01) {
+                printf(" (Ignition on)\n");
+            }
+        } else if (inbound_frame->data[0] == 0x01 && inbound_frame->data[1] == 0x00) {
+            if (inbound_frame->data[2] == 0x00) {
+                printf(" (Modem is not ready)\n");
+            } else if (inbound_frame->data[2] == 0x01) {
+                printf(" (Modem is available)\n");
+            }
+        } else {
+            printf("\n");
+        }
+    } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x040000) {
+        printf("Wakeup\n");
+    } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x1CABCD && inbound_frame->data[0] == 0x00) {
+        printf("GO Accept Message to Buffer ");
+        if (inbound_frame->data[1] == 0x00) {
+            printf("(Failed)\n");
+        } else if (inbound_frame->data[1] == 0x01) {
+            printf("(Success)\n");
+        }
+    } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x1CABCD && inbound_frame->data[0] == 0x05) {
+        if (inbound_frame->data[1] == 0x00) {
+            printf("External Device Channel Disabled\n");
+        } else if (inbound_frame->data[1] == 0x01) {
+            printf("External Device Channel Enabled\n");
+        }
+    } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x0BABCD) {
+        printf("TX Data\n");
+    } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x27ABCD) {
+        printf("GO Multi-Frame Data (Frame %d)\n", inbound_frame->data[0]);
+    } else {
+        printf("Unclassified Message\n");
+    }
 }

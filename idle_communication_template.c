@@ -11,6 +11,19 @@
 
 // Function to handle CAN messages
 void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_index) {
+    static struct can_frame last_frame; // Store the last frame
+    static int first_message = 1;       // Flag to check if it's the first message
+
+    if (!first_message) {
+        classify_can_frame(frame, &last_frame); // Classify the previous frame information
+    } else {
+        first_message = 0; // Clear the flag after first message
+        classify_can_frame(frame, frame); // Classify the previous frame information
+    }
+
+    // Store the current frame as the last frame
+    last_frame = *frame;
+
     if ((frame->can_id & CAN_EFF_MASK) == 0x00010000) {
         if (*messaging_index == 0) {
             uint8_t response_data[] = {0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A};
