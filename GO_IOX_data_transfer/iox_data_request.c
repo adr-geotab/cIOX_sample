@@ -24,8 +24,8 @@ void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_inde
         (*messaging_index)++;
     } else if ((frame->can_id & CAN_EFF_MASK) == 0x0014ABCD) {
         if (*messaging_index == 3) {
-            uint8_t response_data[] = {0x01, 0x01, 0x70, 0x10, 0x01, 0x00};
-            send_can_frame(sockfd, 0x001DABCD, response_data, sizeof(response_data));
+            uint8_t response_data[] = {0x02, 0x00, 0x01};
+            send_can_frame(sockfd, 0x0025ABCD, response_data, sizeof(response_data));
             printf("Send External Device ID\n");
         }
         (*messaging_index)++;

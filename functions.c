@@ -120,26 +120,3 @@ void print_can_frame(struct can_frame *frame) {
     }
     printf("| \n");
 }
-
-// Function to handle CAN messages
-void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_index) {
-    if ((frame->can_id & CAN_EFF_MASK) == 0x00010000) {
-        if (*messaging_index == 0) {
-            uint8_t response_data[] = {0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A};
-            send_can_frame(sockfd, 0x0002ABCD, response_data, sizeof(response_data));
-            printf("Poll Response (Handshake)\n");
-        } else {
-            uint8_t response_data[] = {0x00};
-            send_can_frame(sockfd, 0x0002ABCD, response_data, sizeof(response_data));
-            printf("Poll Response\n");
-        }
-        (*messaging_index)++;
-    } else if ((frame->can_id & CAN_EFF_MASK) == 0x0014ABCD) {
-        if (*messaging_index == 3) {
-            uint8_t response_data[] = {0x01, 0x01, 0x70, 0x10, 0x01, 0x00};
-            send_can_frame(sockfd, 0x001DABCD, response_data, sizeof(response_data));
-            printf("Send External Device ID\n");
-        }
-        (*messaging_index)++;
-    }
-}
