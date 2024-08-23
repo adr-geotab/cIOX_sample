@@ -38,13 +38,26 @@ Scripts in this directory manage the construction and transmission of MIME messa
 This directory contains scripts for transferring single-frame and multi-frame data log types 0x1D, 0x1E, and 0x27 between the IOX and GO devices. This entails the requesting, transmission, and retrieval of status, priority, and free-format third party data. For a comprehensive overview, see [here](GO_IOX_data_transfer/README.md).
 
 ### custom_messaging
-This directory includes scripts for sending and retrieving custom messages using 0x1E multi-frame data logs from an IOX device to a GO device via the CAN bus. The custom_messaging.py script constructs and sends the custom payloads, while custom_messaging_retrieve.js fetches and decodes these messages from the MyGeotab cloud. For further details, refer to the [custom_messaging README](custom_messaging/README.md).
+This directory includes scripts for sending and retrieving custom messages using 0x1E multi-frame data logs from an IOX device to a GO device via the CAN bus. The `custom_messaging.py` script constructs and sends the custom payloads, while `custom_messaging_retrieve.js` and `custom_messaging_retrieve.py` fetch and decode these messages from the MyGeotab cloud. For further details, refer to the [custom messaging README](custom_messaging/README.md).
 
-### functions.py
+### `functions.py`
 This script defines functions for sending messages over the CAN terminal and classifying inbound messages based on arbitration ID and payload. These functions are crucial for effective logging and payload handling.
 
-### idle_communication_template.py
+### `idle_communication_template.py`
 This script provides a minimal implementation for communication between the GO and IOX devices. Thus, it can serve as a template for GO/IOX interaction script development over the CAN bus. Upon bringing up the CAN bus, the IOX handshakes (0x02) in response to the first poll request (0x01) and responds to all other poll requests. After the second poll request is acknowledged by the GO device (0x14), the IOX declares its device ID in a single frame data log (0x1D).
+
+## Configuration
+These sample scripts are developed using the PiCAN board, which is a CAN bus interface for Raspberry Pi. CAN message transmission and reception are handled using the `python-can` library. API interactions are managed through the MyGeotab SDK API, accessible [here](https://geotab.github.io/sdk/software/api/runner.html). Scripts that control IOX behavior are implemented in Python, while API calls are executed in both JavaScript and Python.
+
+### Setting Up the Environment
+**Linux/macOS**: To install dependencies, run the following command in your terminal:
+```
+bash install_dependencies.sh
+```
+**Windows**: To install dependencies, run the following command in your PowerShell:
+```
+./install_dependencies.ps1
+```
 
 ## Resources
 The following resources pertain to the IOX communication sample in this repository:
@@ -52,7 +65,3 @@ The following resources pertain to the IOX communication sample in this reposito
 - [Sample IOX Communication Session over CAN](https://docs.google.com/document/d/1BExcPst5bNzv-IZGX6ZbPeHK5MO1s2AI0rqzEhHbNZ4)
 - [MyGeotab SDK API Runner](https://geotab.github.io/sdk/software/api/runner.html)
 - [MIME Protocol](https://developers.geotab.com/hardware/guides/mimeProtocol)
-
-
-## Configuration
-These sample scripts are developed using the PiCAN board, which is a CAN bus interface for Raspberry Pi. CAN message transmission and reception are handled using the `python-can` library. API interactions are managed through the MyGeotab SDK API, accessible [here](https://geotab.github.io/sdk/software/api/runner.html). Scripts that control IOX behavior are implemented in Python, while API calls are executed in JavaScript.

@@ -3,10 +3,10 @@ This directory demonstrates how to send and receive MIME messages going from the
 
 The MIME protocol can be used to exchange data between MyGeotab and an external device when the total message size exceeds the packet. To learn more about payload structuring under the MIME protocol, visit the [Geotab docs](https://developers.geotab.com/hardware/guides/mimeProtocol).
 
-## MIME_send.js
-This script is responsible for sending the MIME message from MyG to a specified GO device over the cloud. The script contains a function that makes an API add call of the [TextMessage](https://developers.geotab.com/myGeotab/apiReference/objects/TextMessage) entity, taking in 3 parameters: The MyG device ID, the MIME type, and the MIME message content. The content is then encoded in base64, and MyG then internally configures the payloads with all of the higher level MIME protocol structuring. Upon successful execution of the script, it should log the MIME's ID in the console.
+## `MIME_send.js` and `MIME_send.py`
+These scripts are responsible for sending the MIME message from MyG to a specified GO device over the cloud. The scripts contain a function that makes an API add call of the [TextMessage](https://developers.geotab.com/myGeotab/apiReference/objects/TextMessage) entity, taking in 3 parameters: The MyG device ID, the MIME type, and the MIME message content. The content is then encoded in base64, and MyG then internally configures the payloads with all of the higher level MIME protocol structuring. Upon successful execution of the scripts, it should log the MIME's ID in the console.
 
-## MIME_inbound_sample.py
+## `MIME_inbound_sample.py`
 This script runs on the IOX device and listens for incoming CAN messages from the GO device. Upon bringing up the CAN bus, the IOX handshakes (0x02) in response to the first poll request (0x01) and responds to all other poll requests. After the second poll request is acknowledged by the GO device (0x14), the IOX declares its device ID in a single frame data log (0x1D). This permits the reception of TX data (0x0B), which is necessary for MIME messaging. When sent from the MyG API, the MIME message is received by the GO device and pushed to declared devices over 0x0B. Upon receiving the message, the script processes, decodes, and re-constructs the MIME message under MIME protocol structuring.
 
 ### Deoding the MIME Message
@@ -15,4 +15,4 @@ This script decodes the MIME message by first identifying which four bytes are a
 ### Sample CAN Logging from Inbound MIME Message
 
 ![Inbound MIME Message](../images/mime_inbound.png)\
-The MIME type and content align with the payload constructed from the API call executed in [MIME_send.js](MIME_send.js). Depending on cellular connectivity, there may be a few seconds of latency before the GO device receives the message from the cloud.
+The MIME type and content align with the payload constructed from the API call executed in [`MIME_send.js`](MIME_send.js). Depending on cellular connectivity, there may be a few seconds of latency before the GO device receives the message from the cloud.

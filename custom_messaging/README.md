@@ -9,7 +9,7 @@ This 0x1E custom messaging approach differs from [MIME messaging](../MIME_outbou
 
 Consequently, 0x1E logs are preferable for simpler, lightweight messaging tasks.
 
-## custom_messaging.py
+## `custom_messaging.py`
 This script constructs the payload from the custom message string and sends it to the GO device. It operates on the IOX device, logging all inbound messages, and includes three primary functions:
 1. Upon initiating the CAN bus, the IOX device performs a handshake (0x02) in response to the initial poll request (0x01) and acknowledges all subsequent poll requests.
 2. After the GO device acknowledges the second poll request (0x14), the IOX sends the external device ID using 0x1D type 0x01.
@@ -27,10 +27,10 @@ The maximum length for multi-frame log data is 27 bytes, excluding the 0x1E stru
 
 ![Custom Messaging Warning](../images/custom_message_warning.png)
 
-## custom_messaging_retrieve.js
-This script is responsible for retriving the custom message sent from the GO device. The script contains a function that makes an API get call for the [CustomData](https://developers.geotab.com/myGeotab/apiReference/objects/CustomData) entity. The function then filters to only include CustomData objects that were sent from the vehicle within the last 24 hours. These objects are then sorted by their `dateTime` property, ascending. Each CustomData object then gets a property added named decodedData that decodes the received message from base64 to ASCII. An array of CustomData objects with the applied modifications is logged to the console as the output.
+## `custom_messaging_retrieve.js` and `custom_messaging_retrieve.py`
+These scripts are responsible for retriving the custom message sent from the GO device. The scripts contain a function that makes an API get call for the [CustomData](https://developers.geotab.com/myGeotab/apiReference/objects/CustomData) entity. The function then filters to only include CustomData objects that were sent from the vehicle within the last 24 hours. These objects are then sorted by their `dateTime` property, ascending. Each CustomData object then gets a property added named decodedData that decodes the received message from base64 to ASCII. An array of CustomData objects with the applied modifications is logged to the console as the output for `custom_messaging_retrieve.js`. For `custom_messaging_retrieve.py`, a JSON file [`response.json`](response.json) is added to the folder containing an array of the CustomData objects retrieved by the API call, as well as the API call parameters.
 
 ### Sample Retrieved Custom Message
-Using [custom_messaging_retrieve.js](custom_messaging_retrieve.js), we can extract and decode the message from the MyGeotab server:
+Using [`custom_messaging_retrieve.js`](custom_messaging_retrieve.js), we can extract and decode the message from the MyGeotab server:
 
 ![MyGeotab cloud interface, confirming reception of the message](../images/custom_message_reception.png)

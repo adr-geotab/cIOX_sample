@@ -1,0 +1,100 @@
+{
+    "callParameters": {
+        "database": "cIOX_demo",
+        "hoursThreshold": 72,
+        "rangeStart": "2024-08-22T21:03:43.979295+00:00",
+        "rangeEnd": "2024-08-19T21:03:43.979295+00:00"
+    },
+    "response": [
+        {
+            "data": "MHgxRSBtdWx0aS1mcmFtZSBkYXRhbG9n",
+            "dateTime": "2024-08-20T19:23:14.405000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "id": "b4A",
+            "decodedData": "0x1E multi-frame datalog"
+        },
+        {
+            "data": "VGhpcyBpcyBzb21lIGN1c3RvbSBkYXRhLg==",
+            "dateTime": "2024-08-20T19:08:58.890000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "id": "b49",
+            "decodedData": "This is some custom data."
+        },
+        {
+            "data": "VGhpcyBpcyBzb21lIGN1c3RvbSBkYXRhLg==",
+            "dateTime": "2024-08-20T18:50:20.063000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "id": "b47",
+            "decodedData": "This is some custom data."
+        },
+        {
+            "data": "VGhpcyBpcyBzb21lIGN1c3RvbSBkYXRhLg==",
+            "dateTime": "2024-08-20T18:48:32.922000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "id": "b44",
+            "decodedData": "This is some custom data."
+        },
+        {
+            "data": "VGhpcyBtZXNzYWdlIGlzIHRvbyBsb25nIHRv",
+            "dateTime": "2024-08-20T18:28:03.385000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "id": "b43",
+            "decodedData": "This message is too long to"
+        },
+        {
+            "data": "VGhpcyBtZXNzYWdlcyBpcyB0b28gbG9uZyB0",
+            "dateTime": "2024-08-20T18:26:11.387000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "id": "b42",
+            "decodedData": "This messages is too long t"
+        },
+        {
+            "data": "MHgxRSBtdWx0aS1mcmFtZSBkYXRhbG9n",
+            "dateTime": "2024-08-20T17:18:57.450000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "id": "b41",
+            "decodedData": "0x1E multi-frame datalog"
+        },
+        {
+            "data": "MHgxRSBtdWx0aS1mcmFtZSBkYXRhbG9n",
+            "dateTime": "2024-08-20T17:17:19.368000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "id": "b40",
+            "decodedData": "0x1E multi-frame datalog"
+        },
+        {
+            "data": "VGhpcyBpcyBhIHRlc3QgMHgxRSBtdWx0aS1m",
+            "dateTime": "2024-08-20T17:09:58.353000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "id": "b3F",
+            "decodedData": "This is a test 0x1E multi-f"
+        },
+        {
+            "data": "dGVzdDI=",
+            "dateTime": "2024-08-20T17:01:06.198000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "id": "b3E",
+            "decodedData": "test2"
+        }
+    ]
+}

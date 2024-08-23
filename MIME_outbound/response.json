@@ -1,0 +1,50 @@
+{
+    "callParameters": {
+        "database": "mime_fetch_demo",
+        "hoursThreshold": 768,
+        "rangeStart": "2024-08-22T20:34:01.337211+00:00",
+        "rangeEnd": "2024-07-21T20:34:01.337211+00:00"
+    },
+    "response": [
+        {
+            "activeFrom": "2024-08-19T20:39:20.456000+00:00",
+            "activeTo": "2050-01-01T00:00:00+00:00",
+            "delivered": "2024-08-19T20:39:20.372000+00:00",
+            "isDirectionToVehicle": false,
+            "messageContent": {
+                "componentType": 0,
+                "mimeType": "text/plain",
+                "data": "VGhpcyBpcyBhIHRlc3QgTUlNRSBtZXNzYWdlIHRoYXQgd2lsbCBiZSBzZW50IGZyb20gdGhlIEdPOSB0byB0aGUgTXlHIGNsb3VkLg==",
+                "channelNumber": 1,
+                "contentType": "MimeContent",
+                "decodedData": "This is a test MIME message that will be sent from the GO9 to the MyG cloud."
+            },
+            "sent": "2024-08-19T20:39:20.372000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "recipient": "NoUserId",
+            "id": "b1F4F"
+        },
+        {
+            "activeFrom": "2024-07-22T20:27:08.756000+00:00",
+            "activeTo": "2050-01-01T00:00:00+00:00",
+            "delivered": "2024-07-22T20:27:08.724000+00:00",
+            "isDirectionToVehicle": false,
+            "messageContent": {
+                "componentType": 0,
+                "mimeType": "text/plain",
+                "data": "VGhpcyBpcyBhIHRlc3QgTUlNRSBtZXNzYWdlIHRoYXQgd2lsbCBiZSBzZW50IGZyb20gdGhlIEdPOSB0byB0aGUgTXlHIGNsb3VkLg==",
+                "channelNumber": 1,
+                "contentType": "MimeContent",
+                "decodedData": "This is a test MIME message that will be sent from the GO9 to the MyG cloud."
+            },
+            "sent": "2024-07-22T20:27:08.724000+00:00",
+            "device": {
+                "id": "b21"
+            },
+            "recipient": "NoUserId",
+            "id": "b1D7A"
+        }
+    ]
+}
