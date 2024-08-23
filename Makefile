@@ -1,32 +1,29 @@
-# Compiler
+# Compiler and flags
 CC = gcc
+CFLAGS = -Wall -I. # -I. to include the current directory for header files
 
-# Compiler flags
-CFLAGS = -Wall -Wextra -O2
+# Source files and objects
+SRC = functions.c
+OBJ = functions.o
 
-# Target executable
-TARGET = idle_communication_template
+# Targets
+all: exc_idle_communication_template exc_iox_data_request
 
-# Source files
-SRCS = idle_communication_template.c functions.c
+# Rules to build the executables
+exc_idle_communication_template: idle_communication_template.o $(OBJ)
+	$(CC) -o $@ idle_communication_template.o $(OBJ)
 
-# Object files
-OBJS = $(SRCS:.c=.o)
+exc_iox_data_request: GO_IOX_data_transfer/iox_data_request.o $(OBJ)
+	$(CC) -o $@ GO_IOX_data_transfer/iox_data_request.o $(OBJ)
 
-# Default target
-all: $(TARGET)
+# Rule to compile idle_communication_template.o
+idle_communication_template.o: idle_communication_template.c functions.h
+	$(CC) $(CFLAGS) -c idle_communication_template.c -o idle_communication_template.o
 
-# Build the target executable
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $(OBJS)
+# Rule to compile GO_IOX_data_request.o
+GO_IOX_data_request.o: GO_IOX_data_transfer/iox_data_request.c functions.h
+	$(CC) $(CFLAGS) -c GO_IOX_data_transfer/iox_data_request.c -o GO_IOX_data_request.o
 
-# Compile source files to object files
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Clean up
+# Clean up build files
 clean:
-	rm -f $(TARGET) $(OBJS)
-
-# Phony targets
-.PHONY: all clean
+	rm -f *.o GO_IOX_data_transfer/*.o exc_idle_communication_template exc_iox_data_request

@@ -29,7 +29,8 @@
 *.dylib
 
 # Executables
-idle_communication_template
+exc_idle_communication_template
+exc_iox_data_request
 *.exe
 *.out
 *.app

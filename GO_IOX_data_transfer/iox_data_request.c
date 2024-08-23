@@ -7,7 +7,7 @@
 #include <net/if.h>
 #include <time.h>
 #include <sys/time.h>
-#include "functions.h"
+#include "../functions.h"
 
 // Function to handle CAN messages
 void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_index) {
@@ -39,8 +39,8 @@ int main() {
     struct can_frame frame;
     int messaging_index = 0;
 
-    printf("\n== Idle Communication Template ==\n");
-    printf("This script reads inbound CAN messages, responds to poll requests, and sends external device ID\n");
+    printf("\n== IOX Data Request Script ==\n");
+    printf("This script requests and reads multi-frame data from the GO device of message type 0x27.\n");
 
     setup_can_interface();
 
