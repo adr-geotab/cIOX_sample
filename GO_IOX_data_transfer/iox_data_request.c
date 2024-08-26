@@ -26,19 +26,19 @@ void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_inde
     
     if ((frame->can_id & CAN_EFF_MASK) == 0x00010000) {
         if (*messaging_index == 0) {
-            uint8_t response_data[] = {0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A};
-            send_can_frame(sockfd, 0x0002ABCD, response_data, sizeof(response_data));
+            uint8_t payload[] = {0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A};
+            send_can_frame(sockfd, 0x0002ABCD, payload, sizeof(payload));
             printf("Poll Response (Handshake)\n");
         } else {
-            uint8_t response_data[] = {0x00};
-            send_can_frame(sockfd, 0x0002ABCD, response_data, sizeof(response_data));
+            uint8_t payload[] = {0x00};
+            send_can_frame(sockfd, 0x0002ABCD, payload, sizeof(payload));
             printf("Poll Response\n");
         }
         (*messaging_index)++;
     } else if ((frame->can_id & CAN_EFF_MASK) == 0x0014ABCD) {
         if (*messaging_index == 3) {
-            uint8_t response_data[] = {0x02, 0x00, 0x01};
-            send_can_frame(sockfd, 0x0025ABCD, response_data, sizeof(response_data));
+            uint8_t payload[] = {0x02, 0x00, 0x01};
+            send_can_frame(sockfd, 0x0025ABCD, payload, sizeof(payload));
             printf("Request GO Device Data\n");
         }
         (*messaging_index)++;

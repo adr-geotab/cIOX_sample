@@ -10,7 +10,7 @@
 #include "functions.h"
 
 // Function to handle CAN messages
-void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_index) {
+void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_index, int *datalog_index) {
     static struct can_frame last_frame;
     static int first_message = 1;
 
@@ -40,7 +40,28 @@ void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_inde
             send_can_frame(sockfd, 0x001DABCD, payload, sizeof(payload));
             printf("Send External Device ID\n");
         }
+        else if (*datalog_index == 2) {
+            uint8_t payload[] = {0x00, 0x00, 0x07, 0x00, 0x01, 0x23, 0x45, 0x67};
+            send_can_frame(sockfd, 0x001EABCD, payload, sizeof(payload));
+            printf("Send Multi-Frame Log 1\n");
+        }
+        else if (*datalog_index == 3) {
+            uint8_t payload[] = {0x01, 0x89, 0xAB, 0xCD};
+            send_can_frame(sockfd, 0x001EABCD, payload, sizeof(payload));
+            printf("Send Multi-Frame Log 2\n");
+        }
+        else if (*datalog_index == 4) {
+            uint8_t payload[] = {0x00, 0xD2, 0x0A, 0x01, 0x64};
+            send_can_frame(sockfd, 0x001DABCD, payload, sizeof(payload));
+            printf("Send Status Data (Time Since Engine Start)\n");
+        }
+        else if (*datalog_index == 5) {
+            uint8_t payload[] = {0x03, 0xD2, 0x0A, 0x01, 0x64};
+            send_can_frame(sockfd, 0x001DABCD, payload, sizeof(payload));
+            printf("Send Priority Status Data (Time Since Engine Start)\n");
+        }
         (*messaging_index)++;
+        (*datalog_index)++;
     }
 }
 
@@ -50,6 +71,7 @@ int main() {
     int nbytes;
     struct can_frame frame;
     int messaging_index = 0;
+    int datalog_index = 0;
 
     printf("\n== Idle Communication Template ==\n");
     printf("This script reads inbound CAN messages, responds to poll requests, and sends external device ID\n");
@@ -82,7 +104,7 @@ int main() {
 
         if (nbytes == sizeof(frame)) {
             print_can_frame(&frame);
-            handle_can_message(sockfd, &frame, &messaging_index);
+            handle_can_message(sockfd, &frame, &messaging_index, &datalog_index);
         }
     }
 

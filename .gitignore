@@ -28,10 +28,13 @@
 *.so.*
 *.dylib
 
-# Executables
+# Generated executables
 exc_idle_communication_template
 exc_iox_data_request
 exc_iox_data_request2
+exc_outbound_data_transfer
+
+# General executables
 *.exe
 *.out
 *.app
