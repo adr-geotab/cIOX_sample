@@ -12,6 +12,31 @@
 #include <sys/time.h>
 #include "functions.h"
 
+// Function to construct the payload given the message string
+void construct_payload(const char *message_to_send, uint8_t ***nested_payload, int *num_payloads, int *total_payload_size) {
+    int message_length = strlen(message_to_send);
+
+    *total_payload_size = 3 + message_length;
+    uint8_t *total_payload = (uint8_t *)malloc(*total_payload_size);
+    total_payload[0] = 0x00;
+    total_payload[1] = (uint8_t)(message_length & 0xFF);
+    total_payload[2] = (uint8_t)((message_length >> 8) & 0xFF);
+    memcpy(&total_payload[3], message_to_send, message_length);
+
+    *num_payloads = (*total_payload_size + 6) / 7;
+    *nested_payload = (uint8_t **)malloc(*num_payloads * sizeof(uint8_t *));
+    
+    for (int i = 0; i < *num_payloads; i++) {
+        int payload_size = (i == *num_payloads - 1) ? (*total_payload_size - i * 7 + 1) : 8;
+        (*nested_payload)[i] = (uint8_t *)malloc(payload_size);
+        (*nested_payload)[i][0] = (uint8_t)i;
+        memcpy(&(*nested_payload)[i][1], &total_payload[i * 7], payload_size - 1);
+    }
+    
+    free(total_payload);
+}
+
+// Function to handle CAN logic
 void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_index, int *datalog_index, uint8_t **nested_payload, int num_payloads, int total_payload_size) {
     static struct can_frame last_frame;
     static int first_message = 1;
@@ -62,29 +87,18 @@ int main() {
     int datalog_index = 0;
 
     char message_to_send[] = "0x1E multi-frame datalog";
-    int message_length = strlen(message_to_send);
+    uint8_t **nested_payload;
+    int num_payloads;
+    int total_payload_size;
 
     printf("\n== Custom Messaging Script ==\n");
     printf("This script intakes and configures a user-inputted message to be transmitted to the MyGeotab cloud via 0x1E multi-frame data logs.\n");
     printf("Message to Send: %s\n\nPayload to Send:\n", message_to_send);
 
-    // Construct the payload
-    int total_payload_size = 3 + message_length;
-    uint8_t total_payload[total_payload_size];
-    total_payload[0] = 0x00;
-    total_payload[1] = (uint8_t)(message_length & 0xFF);
-    total_payload[2] = (uint8_t)((message_length >> 8) & 0xFF);
-    for (int i = 0; i < message_length; i++) {
-        total_payload[3 + i] = (uint8_t)message_to_send[i];
-    }
+    construct_payload(message_to_send, &nested_payload, &num_payloads, &total_payload_size);
 
-    int num_payloads = (total_payload_size + 6) / 7;
-    uint8_t *nested_payload[num_payloads];
     for (int i = 0; i < num_payloads; i++) {
         int payload_size = (i == num_payloads - 1) ? (total_payload_size - i * 7 + 1) : 8;
-        nested_payload[i] = (uint8_t *)malloc(payload_size);
-        nested_payload[i][0] = (uint8_t)i;
-        memcpy(&nested_payload[i][1], &total_payload[i * 7], payload_size - 1);
         for (int j = 0; j < payload_size; j++) {
             printf("0x%02X ", nested_payload[i][j]);
         }
@@ -92,8 +106,8 @@ int main() {
     }
     printf("\n");
 
-    if (message_length > 27) {
-        printf("\033[93mWARNING: 0x1E multi-frame data logs support up to 27 bytes. Your message is %d bytes.\nThe message will still send but the GO will truncate the message after byte 27.\nTo send longer messages, refer to the MIME protocol.\033[0m\n\n", message_length);
+    if (strlen(message_to_send) > 27) {
+        printf("\033[93mWARNING: 0x1E multi-frame data logs support up to 27 bytes. Your message is %lu bytes.\nThe message will still send but the GO will truncate the message after byte 27.\nTo send longer messages, refer to the MIME protocol.\033[0m\n\n", strlen(message_to_send));
     }
 
     setup_can_interface();
@@ -133,6 +147,7 @@ int main() {
     for (int i = 0; i < num_payloads; i++) {
         free(nested_payload[i]);
     }
+    free(nested_payload);
 
     close(sockfd);
     return 0;
