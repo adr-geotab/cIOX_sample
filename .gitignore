@@ -34,6 +34,8 @@ exc_iox_data_request
 exc_iox_data_request2
 exc_outbound_data_transfer
 exc_custom_messaging
+exc_mime_inbound_sample
+exc_mime_outbound_sample
 
 # General executables
 *.exe

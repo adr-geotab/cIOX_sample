@@ -128,7 +128,7 @@ void classify_can_frame(const struct can_frame *inbound_frame, const struct can_
     if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x00010000) {
         printf("Poll Request\n");
     } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x0014ABCD) {
-        printf("Acknowledgement of 0x%08X\n", prev_outbound_frame->can_id);
+        printf("Acknowledgement of 0x%08X\n", (prev_outbound_frame->can_id & CAN_EFF_MASK));
     } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x260000) {
         printf("GO Status Information Log");
         if (inbound_frame->data[0] == 0x00 && inbound_frame->data[1] == 0x00) {
