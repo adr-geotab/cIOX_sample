@@ -73,8 +73,8 @@ int main() {
     int messaging_index = 0;
     int datalog_index = 0;
 
-    printf("\n== Idle Communication Template ==\n");
-    printf("This script reads inbound CAN messages, responds to poll requests, and sends external device ID\n");
+    printf("\n== Outbound Data Transfer Script ==\n");
+    printf("This script transfers data from the IOX to the GO device. This includes samples of message type 0x1D (single frame data log) and 0x1E (multi frame data log).\n");
 
     setup_can_interface();
 

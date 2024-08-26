@@ -33,6 +33,7 @@ exc_idle_communication_template
 exc_iox_data_request
 exc_iox_data_request2
 exc_outbound_data_transfer
+exc_custom_messaging
 
 # General executables
 *.exe
