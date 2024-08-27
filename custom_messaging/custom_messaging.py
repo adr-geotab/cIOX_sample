@@ -29,8 +29,8 @@ for index, i in enumerate(nested_payload):
     print()
 
 # Warn for GO truncation
-if len(message_to_send) > 28:
-    print(f"\033[93mWARNING: 0x1E multi-frame data logs support up to 27 bytes. Your message is {len(message_to_send)} bytes. \nThe message will still send but the GO will truncate the message after byte 27. \nTo send longer messages, refer to the MIME protocol.\033[0m")
+if len(message_to_send) > 27:
+    print(f"\n\033[93mWARNING: 0x1E multi-frame data logs support up to 27 bytes. Your message is {len(message_to_send)} bytes. \nThe message will still send but the GO will truncate the message after byte 27. \nTo send longer messages, refer to the MIME protocol.\033[0m")
 
 # Initialization and CAN startup
 messaging_index, datalog_index = 0, 0

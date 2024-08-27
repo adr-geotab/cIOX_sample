@@ -17,7 +17,7 @@ message_to_send = "This is a test MIME message that will be sent from the GO9 to
 print('\n\r== MIME Outbound Custom Messaging Sample ==')
 print('This script sends a MIME message of custom type and content from the GO device to the MyG server.')
 print(f'\nMIME Type: {mime_type}')
-print(f'Message to Send: {message_to_send}')
+print(f'MIME Payload: {message_to_send}')
 
 # Define the total payload byte array. Append info length in little-endian 1,4 bytes and ASCII vals of strs
 total_payload = bytearray()
