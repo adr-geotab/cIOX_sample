@@ -63,10 +63,10 @@ void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_inde
         }
 
         for (int i = 0; i < frame->can_dlc; i++) {
-            if ((*type_captured_length < *mime_type_length) & (*inbound_tx_index != 0 || i >= 2)) {
+            if ((*type_captured_length < *mime_type_length) && (*inbound_tx_index != 0 || i >= 2)) {
                 (*mime_type_buffer)[*type_captured_length] = frame->data[i];
                 (*type_captured_length)++;
-            } else if ((*content_length_captured_length < 4) & (*inbound_tx_index != 0 || i >= 2)) {
+            } else if ((*content_length_captured_length < 4) && (*inbound_tx_index != 0 || i >= 2)) {
                 mime_content_size_little_endian[*content_length_captured_length] = frame->data[i];
                 (*content_length_captured_length)++;
                 if (*content_length_captured_length == 3) {
@@ -80,7 +80,7 @@ void handle_can_message(int sockfd, struct can_frame *frame, int *messaging_inde
                         exit(1);
                     }
                 }
-            } else if ((*mime_content_captured_length < *mime_content_size) & (*inbound_tx_index != 0 || i >= 2)) {
+            } else if ((*mime_content_captured_length < *mime_content_size) && (*inbound_tx_index != 0 || i >= 2)) {
                 (*mime_content_buffer)[*mime_content_captured_length] = frame->data[i];
                 (*mime_content_captured_length)++;
             }

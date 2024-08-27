@@ -1,13 +1,13 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Wall -I. # -I. to include the current directory for header files
+CFLAGS = -Wall -I.
 
 # Source files and objects
 SRC = functions.c
 OBJ = functions.o
 
 # Targets
-all: exc_idle_communication_template exc_iox_data_request exc_iox_data_request2 exc_outbound_data_transfer exc_custom_messaging exc_mime_inbound_sample
+all: exc_idle_communication_template exc_iox_data_request exc_iox_data_request2 exc_outbound_data_transfer exc_custom_messaging exc_mime_inbound_sample exc_mime_outbound_sample
 
 # Rules to build the executables
 exc_idle_communication_template: idle_communication_template.o $(OBJ)
@@ -27,6 +27,9 @@ exc_custom_messaging: custom_messaging/custom_messaging.o $(OBJ)
 
 exc_mime_inbound_sample: MIME_inbound/MIME_inbound_sample.o $(OBJ)
 	$(CC) -o $@ MIME_inbound/MIME_inbound_sample.o $(OBJ)
+	
+exc_mime_outbound_sample: MIME_outbound/MIME_outbound_sample.o $(OBJ)
+	$(CC) -o $@ MIME_outbound/MIME_outbound_sample.o $(OBJ)
 
 # Rules for compiling the object files
 idle_communication_template.o: idle_communication_template.c functions.h
@@ -47,6 +50,9 @@ custom_messaging.o: custom_messaging/custom_messaging.c functions.h
 MIME_inbound_sample.o: MIME_inbound/MIME_inbound_sample.c functions.h
 	$(CC) $(CFLAGS) -c MIME_inbound/MIME_inbound.c -o MIME_inbound_sample.o
 
+MIME_outbound_sample.o: MIME_outbound/MIME_outbound_sample.c functions.h
+	$(CC) $(CFLAGS) -c MIME_outbound/MIME_outbound.c -o MIME_outbound_sample.o
+
 # Clean up build files
 clean:
-	rm -f *.o GO_IOX_data_transfer/*.o custom_messaging/*.o MIME_inbound/*.o MIME_outbound/*.o exc_idle_communication_template exc_iox_data_request exc_iox_data_request2 exc_outbound_data_transfer exc_custom_messaging exc_mime_inbound_sample
+	rm -f *.o GO_IOX_data_transfer/*.o custom_messaging/*.o MIME_inbound/*.o MIME_outbound/*.o exc_idle_communication_template exc_iox_data_request exc_iox_data_request2 exc_outbound_data_transfer exc_custom_messaging exc_mime_inbound_sample exc_mime_outbound_sample

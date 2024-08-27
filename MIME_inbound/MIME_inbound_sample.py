@@ -84,7 +84,7 @@ try:
 
                 if inbound_tx_index == messages_expected:
                     mime_type_buffer = mime_type_buffer[2:-4]
-                    print(f"\n\033[92mSUCCESS! The MIME message has been received.\033[0m\nMIME Type: {bytes(mime_type_buffer).decode('latin-1')}\nMIME Content: {bytes(mime_content_buffer).decode('latin-1')}\n")
+                    print(f"\n\033[92mSUCCESS! The MIME message has been received.\033[0m\nMIME Type: {bytes(mime_type_buffer).decode('latin-1')}\nMIME Payload: {bytes(mime_content_buffer).decode('latin-1')}\n")
                     inbound_tx_index = 0
                     read_data = False
                     mime_content_buffer = []
