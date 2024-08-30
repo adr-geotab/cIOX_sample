@@ -45,6 +45,10 @@ exc_mime_outbound_sample
 *.x86_64
 *.hex
 
+# Protobuf compiler files
+/protoc/bin
+protobuf/protoc/include/google/protobuf/compiler
+
 # Debug files
 *.dSYM/
 *.su
