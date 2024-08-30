@@ -39,14 +39,14 @@ try:
         
         if (inbound_msg.arbitration_id == 0x00010000): 
             if poll_index == 0:
-                outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
+                outbound_msg = send_can_frame(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
             else:
-                outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x00], 'Poll Response')
+                outbound_msg = send_can_frame(bus, 0x0002ABCD, [0x00], 'Poll Response')
             poll_index += 1
 
         elif (inbound_msg.arbitration_id == 0x0014ABCD): 
             if poll_index == 2:
-                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
+                outbound_msg = send_can_frame(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
                 # print(f"\033[92mThe IOX's Device ID has been declared. It can now receive TX data. You can now send the MIME message.\033[0m")
                 poll_index += 1
 

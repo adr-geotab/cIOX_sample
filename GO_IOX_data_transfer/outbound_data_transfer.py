@@ -38,31 +38,31 @@ try:
         
         if (inbound_msg.arbitration_id == 0x00010000): 
             if poll_index == 0:
-                outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
+                outbound_msg = send_can_frame(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
             else:
-                outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x00], 'Poll Response')
+                outbound_msg = send_can_frame(bus, 0x0002ABCD, [0x00], 'Poll Response')
             poll_index += 1
 
         elif (inbound_msg.arbitration_id == 0x0014ABCD): 
             if poll_index == 2:
-                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
+                outbound_msg = send_can_frame(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
                 poll_index += 1
                 datalog_index += 1
 
             elif datalog_index == 1:
-                outbound_msg = send_outbound_msg(bus, 0x001EABCD, [0x00, 0x00, 0x07, 0x00, 0x01, 0x23, 0x45, 0x67], 'Send Multi-Frame Log 1')
+                outbound_msg = send_can_frame(bus, 0x001EABCD, [0x00, 0x00, 0x07, 0x00, 0x01, 0x23, 0x45, 0x67], 'Send Multi-Frame Log 1')
                 datalog_index += 1
 
             elif datalog_index == 2:
-                outbound_msg = send_outbound_msg(bus, 0x001EABCD, [0x01, 0x89, 0xAB, 0xCD], 'Send Multi-Frame Log 2')
+                outbound_msg = send_can_frame(bus, 0x001EABCD, [0x01, 0x89, 0xAB, 0xCD], 'Send Multi-Frame Log 2')
                 datalog_index += 1
 
             elif datalog_index == 3:
-                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x00, 0xD2, 0x0A, 0x01, 0x64], 'Sending Status Data (Time Since Engine Start)')
+                outbound_msg = send_can_frame(bus, 0x001DABCD, [0x00, 0xD2, 0x0A, 0x01, 0x64], 'Sending Status Data (Time Since Engine Start)')
                 datalog_index += 1
 
             elif datalog_index == 4:
-                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x03, 0xD2, 0x0A, 0x01, 0x64], 'Sending Priority Status Data (Time Since Engine Start)')
+                outbound_msg = send_can_frame(bus, 0x001DABCD, [0x03, 0xD2, 0x0A, 0x01, 0x64], 'Sending Priority Status Data (Time Since Engine Start)')
                 datalog_index += 1
 
         prev_outbound_msg = outbound_msg

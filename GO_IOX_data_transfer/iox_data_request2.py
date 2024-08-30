@@ -38,18 +38,18 @@ try:
         
         if (inbound_msg.arbitration_id == 0x00010000): 
             if msg_index == 0:
-                outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
+                outbound_msg = send_can_frame(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
             else:
-                outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x00], 'Poll Response')
+                outbound_msg = send_can_frame(bus, 0x0002ABCD, [0x00], 'Poll Response')
             msg_index += 1
 
         elif (inbound_msg.arbitration_id == 0x0014ABCD): 
             if msg_index == 2:
-                outbound_msg = send_outbound_msg(bus, 0x0025ABCD, [0x0C, 0x00, 0x00], 'Request GO Serial Number')
+                outbound_msg = send_can_frame(bus, 0x0025ABCD, [0x0C, 0x00, 0x00], 'Request GO Serial Number')
                 msg_index += 1
 
             elif msg_index == 4:
-                outbound_msg = send_outbound_msg(bus, 0x0025ABCD, [0x0C, 0x00, 0x01], 'Request GO Firmware Version')
+                outbound_msg = send_can_frame(bus, 0x0025ABCD, [0x0C, 0x00, 0x01], 'Request GO Firmware Version')
                 msg_index += 1
 
         prev_outbound_msg = outbound_msg

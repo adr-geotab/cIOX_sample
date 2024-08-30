@@ -62,27 +62,27 @@ try:
         
         if (inbound_msg.arbitration_id == 0x00010000): 
             if poll_index == 0:
-                outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
+                outbound_msg = send_can_frame(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
             else:
-                outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x00], 'Poll Response')
+                outbound_msg = send_can_frame(bus, 0x0002ABCD, [0x00], 'Poll Response')
             poll_index += 1
 
         elif (inbound_msg.arbitration_id == 0x0014ABCD): 
             if poll_index == 2:
-                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
+                outbound_msg = send_can_frame(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
                 poll_index += 1
 
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x0002ABCD' and poll_index == 4:
-                outbound_msg = send_outbound_msg(bus, 0x0025ABCD, [0x01, 0x00, 0x00], 'MIME-1 (Beginning Packet Wrapper)')
+                outbound_msg = send_can_frame(bus, 0x0025ABCD, [0x01, 0x00, 0x00], 'MIME-1 (Beginning Packet Wrapper)')
                 poll_index += 1
                 mime_index += 1
 
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' in ('0x0025ABCD', '0x000CABCD') and mime_index > 0 and mime_index <= len(grouped_payloads):
-                outbound_msg = send_outbound_msg(bus, 0x000CABCD, grouped_payloads[mime_index-1], f'MIME-{mime_index} (MIME Rx)')
+                outbound_msg = send_can_frame(bus, 0x000CABCD, grouped_payloads[mime_index-1], f'MIME-{mime_index} (MIME Rx)')
                 mime_index += 1
 
             elif f'0x{prev_outbound_msg.arbitration_id:08X}' == '0x000CABCD' and mime_index-1 == len(grouped_payloads):
-                outbound_msg = send_outbound_msg(bus, 0x0025ABCD, [0x01, 0x00, 0x01], f'MIME-{mime_index} (Ending Packet Wrapper)')
+                outbound_msg = send_can_frame(bus, 0x0025ABCD, [0x01, 0x00, 0x01], f'MIME-{mime_index} (Ending Packet Wrapper)')
                 mime_index += 1
 
         elif inbound_msg.arbitration_id == 0x1CABCD and [inbound_msg.data[0], inbound_msg.data[1]] == [0x00, 0x00]:

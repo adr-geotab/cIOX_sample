@@ -57,19 +57,19 @@ try:
         
         if (inbound_msg.arbitration_id == 0x00010000): 
             if messaging_index == 0:
-                outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
+                outbound_msg = send_can_frame(bus, 0x0002ABCD, [0x01, 0x01, 0x00, 0x12, 0x16, 0x00, 0x00, 0x9A], 'Poll Response (Handshake)')
             else:
-                outbound_msg = send_outbound_msg(bus, 0x0002ABCD, [0x00], 'Poll Response')
+                outbound_msg = send_can_frame(bus, 0x0002ABCD, [0x00], 'Poll Response')
             messaging_index += 1
 
         elif (inbound_msg.arbitration_id == 0x0014ABCD): 
             if messaging_index == 2:
-                outbound_msg = send_outbound_msg(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
+                outbound_msg = send_can_frame(bus, 0x001DABCD, [0x01, 0x01, 0x70, 0x10, 0x01, 0x00], 'Send External Device ID')
                 messaging_index += 1
                 datalog_index += 1
 
             elif datalog_index <= len(nested_payload) and datalog_index != 0:
-                outbound_msg = send_outbound_msg(bus, 0x001EABCD, nested_payload[datalog_index-1], f'Send Multi-Frame Log {datalog_index}')
+                outbound_msg = send_can_frame(bus, 0x001EABCD, nested_payload[datalog_index-1], f'Send Multi-Frame Log {datalog_index}')
                 datalog_index += 1
 
             elif datalog_index == len(nested_payload) + 1:
