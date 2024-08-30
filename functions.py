@@ -58,6 +58,9 @@ def classify_inbound_msg(inbound_msg, prev_outbound_msg):
     elif inbound_msg.arbitration_id == 0x27ABCD:
         print(f'GO Multi-Frame Data (Frame {inbound_msg.data[0]})')
 
+    elif inbound_msg.arbitration_id == 0x050000:
+        print(f'Sleep')
+
     else:
         print('Unclassified Message')
     

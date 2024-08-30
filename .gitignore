@@ -69,4 +69,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.pyc
+
+# Environment
 .env
+venv/
