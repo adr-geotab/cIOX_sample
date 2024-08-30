@@ -165,6 +165,8 @@ void classify_can_frame(const struct can_frame *inbound_frame, const struct can_
         printf("TX Data\n");
     } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x27ABCD) {
         printf("GO Multi-Frame Data (Frame %d)\n", inbound_frame->data[0]);
+    } else if ((inbound_frame->can_id & CAN_EFF_MASK) == 0x050000) {
+        printf("Sleep\n");
     } else {
         printf("Unclassified Message\n");
     }

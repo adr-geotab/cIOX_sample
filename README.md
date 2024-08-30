@@ -40,6 +40,9 @@ This directory contains scripts for transferring single-frame and multi-frame da
 ### Custom Messaging
 This directory includes scripts for sending and retrieving custom messages using 0x1E multi-frame data logs from an IOX device to a GO device via the CAN bus. The `custom_messaging.py` and `custom_messaging.c` scripts construct and send the custom payloads, while `custom_messaging_retrieve.js` and `custom_messaging_retrieve.py` fetch and decode these messages from the MyGeotab cloud. For further details, refer to the [custom messaging README](custom_messaging/README.md).
 
+### Protobuf 
+Protobuf, handled by 0x1E and 0x27 type 13 CAN frames, provides an extensible mechanism for serializing structured data in both outbound and inbound directions from the IOX. Leveraging a subscription/publication framework, the IOX can subscribe to a specific data type from the GO device using 0x1E. In response, the GO device will send a log every time the subscribed data changes, up to approximately 1 Hz via 0x27. The source IOX protobuf schema can be found [here](https://github.com/Geotab/android-external-device-example/blob/master/app/src/main/proto/iox_messaging.proto).
+
 ### Functions
 These scripts define functions for sending messages over the CAN terminal and classifying inbound messages based on arbitration ID and payload. These functions are crucial for effective logging and payload handling. This entails `functions.py`, `functions.c`, and `functions.h`.
 
@@ -53,8 +56,6 @@ A Makefile is provided in the root directory to compile the C scripts. Each C sc
 These sample scripts are developed using the PiCAN board, which is a CAN bus interface for Raspberry Pi. CAN message transmission and reception are handled using the `<linux/can.h>` header and the `python-can` library. API interactions are managed through the MyGeotab SDK API, accessible [here](https://geotab.github.io/sdk/software/api/runner.html). 
 
 The scripts controlling IOX behavior are implemented in both C and Python. Similarly, API calls are demonstrated using both JavaScript and Python. It is important to note that the C and Python scripts, as well as the JavaScript and Python scripts, do not interact with each other. Instead, each pair of languages is used to achieve the same functionality, providing a choice of implementation for better interpretability and flexibility for integrators and developers.
-
-
 
 ### Setting Up the Environment
 **Linux/macOS**: To install dependencies, run the following command in your terminal:
